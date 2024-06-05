@@ -62,6 +62,9 @@ if(isset($_GET['logout'])){
 		<div>
 		<a class="main"><img src="images/main.jpg" alt="main"></a>
 		</div>
+        <div>
+            Book an appointment today!
+        </div>
         <script type="text/javascript" src="mobile.js"></script>  
 </center>
 </body>
