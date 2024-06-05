@@ -16,9 +16,12 @@ $errors=[];
       if(!empty($username) && !empty($password))
       {
         $password= hash('sha256',$password);
-        $query = " SELECT * FROM user WHERE username='$username' and password='$password' and role = '$role' LIMIT 1";
+        $query = "SELECT * FROM user WHERE username='$username' and password='$password' and role = '$role' LIMIT 1";
         $results = mysqli_query($db, $query);
         $res = mysqli_fetch_assoc($results);
+        if($res['ulevel'] == 1){
+          echo "student";
+        } else "generic error";
         if($username == $res['username'] && $password==$res['password'] && $role == $res['role'])
         {
             $_SESSION['username']=$username;
