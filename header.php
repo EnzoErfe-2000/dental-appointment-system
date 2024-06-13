@@ -2,7 +2,7 @@
 
 <header>
     <div class="mobile-nav-links" id="mobile-nav-links">
-        <a href="#schedules.php">Schedules</a>
+        <a href="#clinics1.php">Schedules</a>
         <a href="#check-appointment.php">Check My Appointments</a>
         <a href="#login.php">Login</a>
     </div>
@@ -31,7 +31,7 @@
             <li><a href="index.php">Home</a></li>
             <?php if(!isset($_SESSION['username'])){?> 
             <!-- <li><a href="registration.php">Sign up</a></li>	 -->
-            <li><a href="schedules.php">Schedules</a></li>	
+            <li><a href="schedules.php">Create An Appointment</a></li>	
             <li><a href="check-appointment.php">Check My Appointment</a></li>
             <li><a class="cta" href="login.php">Login</a></li>
             <?php }?>

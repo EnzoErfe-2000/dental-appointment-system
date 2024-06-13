@@ -74,7 +74,7 @@ if(isset($_GET['logout'])){
                 </div>
                 <div class="sub-div">
                     <div>
-                        Book an appointment today!
+                        <a class="cta" href="schedules.php">Book an appointment today!</a>
                     </div>
                 </div>
             </div>
