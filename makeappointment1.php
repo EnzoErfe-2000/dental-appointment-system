@@ -17,6 +17,10 @@
         // $uname = mysqli_real_escape_string($db, $_SESSION['username']);
         $pname = mysqli_real_escape_string($db, $_POST['pname']);
         $pic = mysqli_real_escape_string($db, $_POST['id_value']);
+        $pemail = mysqli_real_escape_string($db, $_POST['email_value']);
+        $pphone = mysqli_real_escape_string($db, $_POST['phone_value']);
+        $paddress = mysqli_real_escape_string($db, $_POST['address_value']);
+        $pmedical = mysqli_real_escape_string($db, $_POST['comments']);
         $dname = mysqli_real_escape_string($db, $dentist_name);
         $locn = mysqli_real_escape_string($db, $_POST['clinic']);
         $date_val = mysqli_real_escape_string($db, $_POST['txtDate']);
@@ -26,9 +30,40 @@
         // $checkq = "SELECT * FROM appointment WHERE uname = '$uname' AND time='$hr' AND date='$date_val' AND (status='Pending' OR status='Confirmed')";
         $checkq = "SELECT * FROM appointment WHERE patient_name = '$pname' AND time='$hr' AND date='$date_val' AND (status='Pending' OR status='Confirmed')";
         $checkq2 = "SELECT * FROM appointment WHERE dname = '$dname' AND time='$hr' AND date='$date_val' AND status='Confirmed'";
-        echo $checkq2;
+        // echo $checkq2;
         $res = mysqli_query($db, $checkq);
         $res2 = mysqli_query($db, $checkq2);
+        
+        // TODO
+        // If patient's first appointment, create new patient 
+        $checkExUser = "SELECT * FROM patient WHERE patientIC = '$pic'";
+        echo $checkExUser."<br>";
+        $resExUser = mysqli_query($db, $checkExUser);
+        if ($resExUser != false) {
+            if (mysqli_num_rows($resExUser) > 0){ 
+                echo "Existing User";
+            }
+            else
+            { 
+                echo "New User";
+                echo "<br>";
+                // TODO
+                $reqNewUser = "INSERT INTO patient(patientName, patientIC, patientEmail, patientPhone, patientAddress, patientMedical) VALUES ('$pname', '$pic', '$pemail', '$pphone', '$paddress', '$pmedical')";
+                echo $reqNewUser."<br>";
+                $resNewUser = mysqli_query($db, $reqNewUser);
+
+                if ($resNewUser != false){
+                    echo "New User created<br>";
+                }
+                else if (mysqli_errno($db)) {
+                    echo "User already Exists (Same Name)";
+                }
+                else { echo "Error with inserting new user";}
+            }
+        }
+        else { echo "Error with checking existing user";}
+        
+
         if($res != false && mysqli_num_rows($res) > 0)
         {
             $notposs = 1;
@@ -41,8 +76,6 @@
             
         if($notposs == 0)
         {
-            // TODO
-            // If patient's first appointment, create new patient 
             
             // $checkq3 = "SELECT * FROM patient WHERE patientIC = '$pic'";
             // // echo $checkq3;
@@ -54,8 +87,7 @@
                 //     $newpq = "INSERT INTO patient(patientName, patientIC, patientEmail, patientPhone, patientAddress, patientMedical) VALUES ('$pname', '$pic', '$pemail', '$pphone', '$paddress', '$pmedical')";
                 // }
                 
-            // TODO
-            // INSERT INTO `patient`(`patientName`, `patientIC`, `patientEmail`, `patientPhone`, `patientAddress`, `patientMedical`) VALUES ('Jessen', 'P2646382B', 'jessen@gmail.com', '$123456789', '', '')   
+            
                 
             // TODO
             // Get the necessary IDs
@@ -175,13 +207,16 @@
                         <input type='text' id='passport_input' name='id_value' placeholder='Passport No.' required disabled style='display:none;'>
                         <br>
                     </td>
-                    </tr>";
-                echo "
+                </tr>
                 <tr>
                     <th>Email<span class='req'>*</span></th>
                     <td><input type='text' id='email_input' name='email_value' placeholder='Email Address' required></td>
                     <th>Phone (+60)</th>
-                    <td><input type='text' id='phone_input' name='phone_value' placeholder='12-3456 789' maxlength='9' required></td>
+                    <td><input type='text' id='phone_input' name='phone_value' placeholder='12-3456 789' maxlength='9'></td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td><input type='text' id='address_input' name='address_value' placeholder='Home Address'</td>
                 </tr>";
                 $d1 = date('Y-m-d');
                 $dt = date('Y-m-d', strtotime($d1.' + 1 days'));
@@ -189,7 +224,7 @@
                 <tr>
                     <th>Dentist Name<span class='req'>*</span></th>
                     <td>".$name."</td>
-                    <th>Choose Date</th>
+                    <th>Choose Date<span class='req'>*</span></th>
                     <td><input type='date' name='txtDate' id='tdate' min='".$dt."'required></td>
                     </tr>
                     <tr>
