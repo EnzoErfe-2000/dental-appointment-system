@@ -27,43 +27,22 @@
         $t1 = substr($_POST['time'], 0, 2)."00";
         $hr = mysqli_real_escape_string($db, $t1);
         $reason = mysqli_real_escape_string($db, $_POST['reason']);
+
         // $checkq = "SELECT * FROM appointment WHERE uname = '$uname' AND time='$hr' AND date='$date_val' AND (status='Pending' OR status='Confirmed')";
         $checkq = "SELECT * FROM appointment WHERE patient_name = '$pname' AND time='$hr' AND date='$date_val' AND (status='Pending' OR status='Confirmed')";
         $checkq2 = "SELECT * FROM appointment WHERE dname = '$dname' AND time='$hr' AND date='$date_val' AND status='Confirmed'";
         // echo $checkq2;
-        $res = mysqli_query($db, $checkq);
-        $res2 = mysqli_query($db, $checkq2);
-        
         // TODO
         // If patient's first appointment, create new patient 
         $checkExUser = "SELECT * FROM patient WHERE patientIC = '$pic'";
         echo $checkExUser."<br>";
-        $resExUser = mysqli_query($db, $checkExUser);
-        if ($resExUser != false) {
-            if (mysqli_num_rows($resExUser) > 0){ 
-                echo "Existing User";
-            }
-            else
-            { 
-                echo "New User";
-                echo "<br>";
-                // TODO
-                $reqNewUser = "INSERT INTO patient(patientName, patientIC, patientEmail, patientPhone, patientAddress, patientMedical) VALUES ('$pname', '$pic', '$pemail', '$pphone', '$paddress', '$pmedical')";
-                echo $reqNewUser."<br>";
-                $resNewUser = mysqli_query($db, $reqNewUser);
-
-                if ($resNewUser != false){
-                    echo "New User created<br>";
-                }
-                else if (mysqli_errno($db)) {
-                    echo "User already Exists (Same Name)";
-                }
-                else { echo "Error with inserting new user";}
-            }
-        }
-        else { echo "Error with checking existing user";}
         
-
+        $res = mysqli_query($db, $checkq);
+        $res2 = mysqli_query($db, $checkq2);
+        $resExUser = mysqli_query($db, $checkExUser);
+        
+        
+        // If appointment already exists,
         if($res != false && mysqli_num_rows($res) > 0)
         {
             $notposs = 1;
@@ -76,31 +55,58 @@
             
         if($notposs == 0)
         {
+            // TODO Check if new user
+            if ($resExUser != false) {
+                if (mysqli_num_rows($resExUser) <= 0){ 
+                    echo "New User";
+                    echo "<br>";
+                    // TODO Create new patient
+                    $reqNewUser = "INSERT INTO patient(patientName, patientIC, patientEmail, patientPhone, patientAddress, patientMedical) VALUES ('$pname', '$pic', '$pemail', '$pphone', '$paddress', '$pmedical')";
+                    echo $reqNewUser."<br>";
+                    $resNewUser = mysqli_query($db, $reqNewUser);
+                    
+                    if ($resNewUser != false){
+                        echo "New User created<br>";
+                    }
+                    else if (mysqli_errno($db)) {
+                        echo "User already Exists (Same Name)";
+                    }
+                    else { echo "Error with inserting new user";}
+                }
+                else
+                { 
+                    echo "Existing User<br>";
+                }
+            }
+            else { echo "Error with checking existing user";}
             
-            // $checkq3 = "SELECT * FROM patient WHERE patientIC = '$pic'";
-            // // echo $checkq3;
-            // $res3 = mysqli_query($db, $checkq3); 
-            // if($res3 != false && mysqli_num_rows($res3) <= 0) {
-                //     $notposs = 1;
-                //     echo mysqli_num_rows($res3);
-                //     array_push($err, "<h3 style='color:red'>New Patient</h3>");
-                //     $newpq = "INSERT INTO patient(patientName, patientIC, patientEmail, patientPhone, patientAddress, patientMedical) VALUES ('$pname', '$pic', '$pemail', '$pphone', '$paddress', '$pmedical')";
-                // }
-                
+            // TODO Get the necessary IDs
+            // $pid = "SELECT patientID FROM patient WHERE patientIC = '$pic'";
+            // $did = "SELECT dentist_id FROM dentist WHERE dentist_name = '$dname'";
+            // $cid = "SELECT clinic_id FROM clinic WHERE clinic_location = '$locn'";
+            // echo $pid."<br>".$did."<br>".$cid."<br>";
             
-                
-            // TODO
-            // Get the necessary IDs
-            // $pid = SELECT `patientID` FROM `patient` WHERE `patientIC` = 'P2646382A/$pic' 
-            // $did = SELECT `dentist_id` FROM `dentist` WHERE `dentist_name` = 'Gan/$dname'
-            // $cid = SELECT `clinic_id` FROM `clinic` WHERE `clinic_location` = 'Gan & Leow Dental Clinic - Melaka/locn'
+            $reqID = "SELECT (SELECT patientID FROM patient WHERE patientIC = '$pic') AS patientID, (SELECT dentist_id FROM dentist WHERE dentist_name = '$dname') AS dentist_id, (SELECT clinic_id FROM clinic WHERE clinic_location = '$locn') AS clinic_id";
+            // echo $reqID."<br>";
             
-            // TODO
-            // Create appointment 
-            // $query = "INSERT INTO appointment(dentist_id, patient_id, clinic_id, appt_date, appt_time, appt_reason) VALUES ('$did', '$pid', '$cid', '$date_val', '$hr', '$reason')"; 
+            $resID = mysqli_query($db, $reqID);
+            if ($resID != false && mysqli_num_rows($resID) > 0){
+                $rowID = mysqli_fetch_assoc($resID);
+                $pid = $rowID['patientID']; 
+                $did = $rowID['clinic_id'];
+                $cid = $rowID['dentist_id'];
+                echo $pid."<br>";
+                echo $did."<br>";
+                echo $cid."<br>";
+            }
             
-            // if(mysqli_query($db, $query))
-            // header("location: appointments.php?dentist=$pic");
+            // TODO Create appointment 
+            $reqAppt = "INSERT INTO appointment(dentist_id, patient_id, clinic_id, appt_date, appt_time, appt_reason) VALUES ('$did', '$pid', '$cid', '$date_val', '$hr', '$reason')"; 
+            echo $reqAppt."<br>";
+            
+            if(mysqli_query($db, $reqAppt))
+            // header("location: appointments.php?patient=$pic");
+            header("location: appointment.php?patient=$pic");
             // Make appointments.php not redirect to index.php
         }
     }
