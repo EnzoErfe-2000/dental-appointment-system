@@ -16,7 +16,7 @@ $db=mysqli_connect('localhost','root','','dcms') or die("could not connect to da
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-1.css">
     <link href="style10.css"type="text/css"rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:500&display=swap" rel="stylesheet"> 
     <style>

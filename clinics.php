@@ -41,7 +41,7 @@ if($_SESSION['role'] == 'dentist')
     <div class="content-section" style="width:75%">
         <h2>Clinics</h2>
         <?php 
-        $query = "SELECT * FROM clinic";
+        $query = "SELECT * FROM clinic1";
         $res = mysqli_query($db, $query);
         if(mysqli_num_rows($res) > 0)
         {

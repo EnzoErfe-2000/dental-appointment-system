@@ -15,17 +15,17 @@
     if(isset($_GET['delete']) && $_SESSION['role'] == 'patient') #delete pending appointment
     {
         $id = $_GET['delete'];
-        $cancel_query = "DELETE FROM appointment WHERE appt_id='".$id."'";
+        $cancel_query = "DELETE FROM appointment1 WHERE appt_id='".$id."'";
         mysqli_query($db, $cancel_query);
         unset($_GET['cancel']);
     }
     if(isset($_GET['reject']) && $_SESSION['role'] == 'dentist') #reject pending appointment
     {
         $id = $_GET['reject'];
-        $cancel_query = "UPDATE appointment SET status = 'Rejected' WHERE appt_id='".$id."'";
+        $cancel_query = "UPDATE appointment1 SET status = 'Rejected' WHERE appt_id='".$id."'";
         mysqli_query($db, $cancel_query);
         unset($_GET['reject']);
-        $q3 = "SELECT * from appointment where appt_id='".$id."'";
+        $q3 = "SELECT * from appointment1 where appt_id='".$id."'";
         $res3 = mysqli_query($db, $q3);
         $row3 = mysqli_fetch_assoc($res3);
         $q4 = "SELECT name from dentist where username='".$row3['dname']."' limit 1";
@@ -56,16 +56,16 @@
     if(isset($_GET['cancel']))
     {
         $id = $_GET['cancel'];
-        $cancel_query = "UPDATE appointment SET status = 'Cancelled' WHERE appt_id='".$id."'";
+        $cancel_query = "UPDATE appointment1 SET status = 'Cancelled' WHERE appt_id='".$id."'";
         mysqli_query($db, $cancel_query);
         unset($_GET['cancel']);
-        $q3 = "SELECT * from appointment where appt_id='".$id."'";
+        $q3 = "SELECT * from appointment1 where appt_id='".$id."'";
         $res3 = mysqli_query($db, $q3);
         $row3 = mysqli_fetch_assoc($res3);
         $q4 = "SELECT * from useraccount where username='".$row3['uname']."'";
         $res4 = mysqli_query($db, $q4);
         $row4 = mysqli_fetch_assoc($res4);
-        $q5 = "SELECT name from dentist where username='".$row3['dname']."' limit 1";
+        $q5 = "SELECT name from dentist1 where username='".$row3['dname']."' limit 1";
         $res5 = mysqli_query($db, $q5);
         $row5 = mysqli_fetch_assoc($res5);
         $q6 = "SELECT email from user where username='".$row3['dname']."' limit 1";
@@ -116,13 +116,13 @@
         if($_SESSION['role'] == 'dentist')
         {
             $id = $_GET['confirm'];
-            $cancel_query = "UPDATE appointment SET status = 'Confirmed' WHERE appt_id='".$id."'";
+            $cancel_query = "UPDATE appointment1 SET status = 'Confirmed' WHERE appt_id='".$id."'";
             mysqli_query($db, $cancel_query);
             unset($_GET['confirm']);
-            $q2 = "SELECT name from dentist where username='".$_SESSION['username']."' limit 1";
+            $q2 = "SELECT name from dentist1 where username='".$_SESSION['username']."' limit 1";
             $res2 = mysqli_query($db, $q2);
             $row2 = mysqli_fetch_assoc($res2);
-            $q3 = "SELECT * from appointment where appt_id='".$id."'";
+            $q3 = "SELECT * from appointment1 where appt_id='".$id."'";
             $res3 = mysqli_query($db, $q3);
             $row3 = mysqli_fetch_assoc($res3);
             $q4 = "SELECT * from useraccount where username='".$row3['uname']."'";
@@ -203,7 +203,7 @@
     <h3>Appointments</h3><br><br>
     <?php
         if($_SESSION['role'] == 'patient') {
-            $query = "SELECT * FROM appointment WHERE uname='".$_SESSION['username']."'";
+            $query = "SELECT * FROM appointment1 WHERE uname='".$_SESSION['username']."'";
             $result = mysqli_query($db, $query);
             if($result == false || mysqli_num_rows($result) == 0)
             echo "<h4>No appointments to show</h4>";
@@ -215,7 +215,7 @@
                 {
                     if(date('Y-m-d') < $row['date'])
                     {
-                        $query2 = "SELECT name FROM dentist WHERE username = '".$row['dname']."' LIMIT 1";
+                        $query2 = "SELECT name FROM dentist1 WHERE username = '".$row['dname']."' LIMIT 1";
                         $dentist_name = mysqli_query($db, $query2);
                         $row2 = mysqli_fetch_assoc($dentist_name);
                         if($row['status'] == 'Pending')
@@ -234,7 +234,7 @@
             }
         }
         elseif ($_SESSION['role'] == 'dentist') {
-            $query = "SELECT * FROM appointment WHERE dname='".$_SESSION['username']."'";
+            $query = "SELECT * FROM appointment1 WHERE dname='".$_SESSION['username']."'";
             $result = mysqli_query($db, $query);
             if($result == false || mysqli_num_rows($result) == 0)
             echo "<h4>No appointments to show</h4>";

@@ -1,28 +1,30 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <!-- Close button -->
+    <button class="close-btn" onclick="toggleSidebar()">Close</button>
+
+    <!-- Sidebar menu -->
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</div>
+
 <header>
-    <div class="mobile-nav-links" id="mobile-nav-links">
-        <a href="#clinics1.php">Schedules</a>
-        <a href="#check-appointment.php">Check My Appointments</a>
-        <a href="#login.php">Login</a>
-    </div>
-    
     <a class="logo" href="index.php"><img src="images/logo.jpg" alt="logo"></a>
     
-    <a href="javascript:void(0);" class="burger-icon" onclick="myFunction()">
-        <i class="fa fa-bars"></i>
+    <a href="javascript:void(0);" class="burger-icon" onclick="toggleSidebar()">
+        <i class="fa fa-bars" style="color:white;"></i>
     </a>
 
     <script>
-    function myFunction() {
-        const navLinks = document.getElementById('mobile-nav-links');
-        
-        if (navLinks.style.display === "block") {
-            navLinks.style.display = "none";
-        }
-        else {
-            navLinks.style.display = "block";
-        };
+    function toggleSidebar() {
+        var sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("active");
     }
     </script>
 

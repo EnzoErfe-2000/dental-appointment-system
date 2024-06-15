@@ -1,0 +1,106 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-family: "Montserrat", sans-serif;
+}
+.body {
+  background-color: white;
+}
+
+.menu {
+  background-color: royalblue;
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  font-weight: bold;
+  /*position: sticky; */
+  top: 0;
+  margin: 0 auto;
+  overflow: hidden;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
+
+.menu a {
+  color: white;
+  text-decoration: none;
+}
+
+.content-section {
+  max-width: 800px;
+  background: #ffffff;
+  padding: 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+/* Form Styles */
+table {
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #dddddd;
+}
+
+th {
+  background-color: dodgerblue;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  width: 140px;
+}
+
+td {
+  font-size: 14px;
+}
+
+input[type="text"],
+input[type="date"],
+input[list],
+input[type="submit"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid powderblue; /* Light blue border */
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[list]:focus,
+textarea:focus {
+  outline: none;
+  border: 3px solid royalblue; /* Highlight border on focus */
+}
+
+@media (max-width: 1020px) {
+  table {
+    width: 100vw;
+    /* Allow table to shrink as needed */
+  }
+
+  /* Ensure each cell is displayed as a block, stacking vertically */
+  table tr,
+  table td {
+    display: block;
+    width: 100%; /* Take full width of parent */
+  }
+}
+
+.req {
+  color: #a52422;
+  margin-left: 4px;
+}

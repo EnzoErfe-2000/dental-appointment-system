@@ -19,8 +19,8 @@
         $t1 = substr($_POST['time'], 0, 2)."00";
         $hr = mysqli_real_escape_string($db, $t1);
         $reason = mysqli_real_escape_string($db, $_POST['reason']);
-        $checkq = "SELECT * FROM appointment WHERE uname = '$uname' AND time='$hr' AND date='$date_val' AND (status='Pending' OR status='Confirmed')";
-        $checkq2 = "SELECT * FROM appointment WHERE dname = '$dname' AND time='$hr' AND date='$date_val' AND status='Confirmed'";
+        $checkq = "SELECT * FROM appointment1 WHERE uname = '$uname' AND time='$hr' AND date='$date_val' AND (status='Pending' OR status='Confirmed')";
+        $checkq2 = "SELECT * FROM appointment1 WHERE dname = '$dname' AND time='$hr' AND date='$date_val' AND status='Confirmed'";
         #echo $checkq2;
         $res = mysqli_query($db, $checkq);
         $res2 = mysqli_query($db, $checkq2);
@@ -35,7 +35,7 @@
         }
         if($notposs == 0)
         {
-            $query = "INSERT INTO appointment(dname, uname, location, date, time, reason) VALUES ('$dname', '$uname', '$locn', '$date_val', '$hr', '$reason')"; 
+            $query = "INSERT INTO appointment1(dname, uname, location, date, time, reason) VALUES ('$dname', '$uname', '$locn', '$date_val', '$hr', '$reason')"; 
             if(mysqli_query($db, $query))
             header("location: appointments.php");
         }
@@ -77,7 +77,7 @@
                 echo $m;
             }
         }
-        $query = "SELECT * from dentist WHERE username='$dentist_uname'";
+        $query = "SELECT * from dentist1 WHERE username='$dentist_uname'";
         $result = mysqli_query($db, $query);
         if($result == false || mysqli_num_rows($result) == 0)
         echo "<h3>Invalid Dentist Name</h3>";

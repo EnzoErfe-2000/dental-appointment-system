@@ -38,7 +38,7 @@
   <?php require_once("header.php");?>
     <div class="content-section" style="width:75%">
         <?php 
-        $query2 = "SELECT location FROM clinic WHERE clinic_id = '$locn' LIMIT 1";
+        $query2 = "SELECT location FROM clinic1 WHERE clinic_id = '$locn' LIMIT 1";
         $res_locn = mysqli_query($db, $query2);
         //var_dump($res_locn);
         if($res_locn == false || mysqli_num_rows($res_locn) == 0)
@@ -48,7 +48,7 @@
             $row = mysqli_fetch_assoc($res_locn);
             $loc = $row['location'];
             echo "<h2>Dentists at $loc</h2><br>";
-            $query = "SELECT * FROM dentist WHERE location = '$loc'";
+            $query = "SELECT * FROM dentist1 WHERE location = '$loc'";
             //echo $query;
             $res_dentist = mysqli_query($db, $query);
             if($res_dentist == false || mysqli_num_rows($res_dentist) == 0)

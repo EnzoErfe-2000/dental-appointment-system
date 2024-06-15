@@ -68,7 +68,8 @@
             // $query = "INSERT INTO appointment(dentist_id, patient_id, clinic_id, appt_date, appt_time, appt_reason) VALUES ('$did', '$pid', '$cid', '$date_val', '$hr', '$reason')"; 
             
             // if(mysqli_query($db, $query))
-            // header("location: appointments.php");
+            // header("location: appointments.php?dentist=$pic");
+            // Make appointments.php not redirect to index.php
         }
     }
 ?>
@@ -80,8 +81,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles.css">
-    <link href="style10.css" type="text/css"rel="stylesheet"/>
+    <link rel="stylesheet" href="styles-1.css">
+    <link href="style10-1.css" type="text/css"rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:500&display=swap" rel="stylesheet">
     <style>
         .menu a{
@@ -107,11 +108,15 @@
             passportInput.disabled = true;
             // Clear the value of the passport input
             passportInput.value = ""; 
+            passportInput.style.display = 'none'; 
+            icInput.style.display = 'block'; 
         } else if (passportRadio.checked) {
             passportInput.disabled = false;
             icInput.disabled = true;
             // Clear the value of the IC input
             icInput.value = ""; 
+            passportInput.style.display = 'block'; 
+            icInput.style.display = 'none'; 
         }    
     }    
     </script>
@@ -140,47 +145,89 @@
             echo "<form action = '' method='post'>";
             $name = "<input type='text' name='dname' id='dname' value='Dr. ".$row['dentist_name']."' readonly/>";
             $clinic = "<input type='text' name='clinic' id='clinic' value='".$row['clinic_location']."' readonly/>";
-            echo "<table><tr><th>Name</th><td><input type='text' id='pname' name='pname' placeholder='Patient Name' required></td></tr>";
-            echo "<tr><th><label for='ic_radio'>Identification Card</label><input type='radio' id='ic_radio' name='id_type' value='ic' onchange='toggleInput()' checked><br><label for='passport_radio'>Passport</label><input type='radio' id='passport_radio' name='id_type' value='passport' onchange='toggleInput()'></th><td>";
-            echo "<br>";
-            echo "<br>";
-            echo "";
-    
-            echo "<label for='ic_input'>IC No.:</label>";
-            echo "<input type='text' id='ic_input' name='id_value' required><br>";
-    
-            echo "<label for='passport_input'>Passport No.:</label>";
-            echo "<input type='text' id='passport_input' name='id_value' disabled><br>";
-    
-            // echo "<input type='submit' value='Submit'></td></tr>";
-    // <input type='text' id='patientIC' name='patientIC' placeholder='IC/Passport' required>
-            echo "<tr><th>Dentist Name</th><td>".$name."</td></tr>";
-            echo "<tr><th>Clinic</th><td>".$clinic."</td></tr>";
-            $d1 = date('Y-m-d');
-            $dt = date('Y-m-d', strtotime($d1.' + 1 days'));
-            echo "<tr><th>Choose Date</th><td><input type='date' name='txtDate' id='tdate' min='".$dt."'required></td></tr>";
-            echo "<tr><th>Choose Time</th><td><input list='times' name='time' required><datalist id='times'>";
             echo "
-            <option value='09:30'>
-            <option value='10:00'>
-            <option value='10:30'>
-            <option value='11:00'>
-            <option value='11:30'>
-            <option value='12:00'>
-            <option value='12:30'>
-            <option value='13:00'>
-            <option value='13:30'>
-            <option value='14:00'>
-            <option value='14:30'>
-            <option value='15:00'>
-            <option value='15:30'>
-            <option value='16:00'>
-            <option value='16:30'>
-            <option value='17:00'>
-            <option value='17:30'>";
-            echo "</datalist></td></tr>";
-            echo "<tr><th>Reason For Appointment</th><td><input type='text' id='reason' name='reason' value='Check-Up' required></td></tr>";
-            echo "</table><input type='submit' name='make_appt' value='Make Appointment' class='example_e' style='width:50%'></form>";
+            <div style='display:flex;justify-content:center;'>
+
+            <table>
+                ";
+                        // echo "<input type='submit' value='Submit'></td></tr>";
+                        // <input type='text' id='patientIC' name='patientIC' placeholder='IC/Passport' required>
+                echo "
+                <tr>
+                    <th>Name<span class='req'>*</span></th>
+                    <td>
+                        <input type='text' id='pname' name='pname' placeholder='Patient Name' required>
+                    </td>
+                    <th>
+                        <div class='flex-h'>
+                            <input type='radio' id='ic_radio' name='id_type' value='ic' onchange='toggleInput()' checked>
+                            <label for='ic_radio'>IC<span class='req'>*</span></label>
+                            </div>
+                            <br>
+                            <div class='flex-h'>
+                            <input type='radio' id='passport_radio' name='id_type' value='passport' onchange='toggleInput()'>
+                            <label for='passport_radio'>Passport<span class='req'>*</span></label>
+                        </div>
+                    </th>
+                    <td style='display:flex;'>
+                        <input type='text' id='ic_input' name='id_value' placeholder='IC No.' required>
+                        <br>
+                        <input type='text' id='passport_input' name='id_value' placeholder='Passport No.' required disabled style='display:none;'>
+                        <br>
+                    </td>
+                    </tr>";
+                echo "
+                <tr>
+                    <th>Email<span class='req'>*</span></th>
+                    <td><input type='text' id='email_input' name='email_value' placeholder='Email Address' required></td>
+                    <th>Phone (+60)</th>
+                    <td><input type='text' id='phone_input' name='phone_value' placeholder='12-3456 789' maxlength='9' required></td>
+                </tr>";
+                $d1 = date('Y-m-d');
+                $dt = date('Y-m-d', strtotime($d1.' + 1 days'));
+                echo "
+                <tr>
+                    <th>Dentist Name<span class='req'>*</span></th>
+                    <td>".$name."</td>
+                    <th>Choose Date</th>
+                    <td><input type='date' name='txtDate' id='tdate' min='".$dt."'required></td>
+                    </tr>
+                    <tr>
+                    <th>Clinic<span class='req'>*</span></th>
+                    <td>".$clinic."</td>
+                    <th>Choose Time<span class='req'>*</span></th>
+                    <td><input list='times' name='time' required>
+                    <datalist id='times'>
+                    <option value='09:30'>
+                    <option value='10:00'>
+                    <option value='10:30'>
+                    <option value='11:00'>
+                    <option value='11:30'>
+                        <option value='12:00'>
+                        <option value='12:30'>
+                        <option value='13:00'>
+                        <option value='13:30'>
+                        <option value='14:00'>
+                        <option value='14:30'>
+                        <option value='15:00'>
+                        <option value='15:30'>
+                        <option value='16:00'>
+                        <option value='16:30'>
+                        <option value='17:00'>
+                        <option value='17:30'>
+                        </datalist>
+                        </td>
+                        </tr>
+                        <tr></tr>
+                    <th>Reason For Appointment<span class='req'>*</span></th>
+                    <td><input type='text' id='reason' name='reason' value='Check-Up' required></td>
+                    <th>Medical Comments</th>
+                    <td><input type='text' id='comments' name='comments' placeholder='Medical conditions.' ></td>
+                </tr>
+            </table>
+            </div>
+            <input type='submit' name='make_appt' value='Make Appointment' class='example_e' style='width:50vw'>
+            </form>";
         }
         ?>
         </table>
