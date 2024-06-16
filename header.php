@@ -7,10 +7,10 @@
 
     <!-- Sidebar menu -->
     <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="index.php">Home</a></li>
+        <li><a href="schedules.php">Create An Appointment</a></li>
+        <li><a href="checkappointment.php">Check My Appointment</a></li>
+        <li><a href="login.php">Login</a></li>
     </ul>
 </div>
 
@@ -34,7 +34,7 @@
             <?php if(!isset($_SESSION['username'])){?> 
             <!-- <li><a href="registration.php">Sign up</a></li>	 -->
             <li><a href="schedules.php">Create An Appointment</a></li>	
-            <li><a href="check-appointment.php">Check My Appointment</a></li>
+            <li><a href="checkappointment.php">Check My Appointment</a></li>
             <li><a class="cta" href="login.php">Login</a></li>
             <?php }?>
             <?php if(isset($_SESSION['username'])){

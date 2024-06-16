@@ -36,45 +36,44 @@ if(isset($_GET['logout'])){
             </div>
         </div>
         <div class=homemain>
-            
+            <div class="container">
+                <div class="column">
+                    <div class="sub-div">
+                        <div class="caption">
+                        <?php if(isset($_SESSION['username'])):?>
 
-        <div class="container">
-            <div class="column">
-                <div class="sub-div">
-                    <div class="caption">
-                    <?php if(isset($_SESSION['username'])):?>
-
-                        <h2>Welcome <strong><?php echo $_SESSION['username'] ; ?> </strong>
-                    </h2>
-                    <?php endif; ?>
-                        <a class="w">We prioritise your</a>
-                        <h1>NEW SMILE</h1>
-                        <!--<button class="ta" href="#">Read more</button>-->    
-                    </div>
-                </div>
-                <?php if(isset($_SESSION['success'])):?>
-                <div>
-                    <h3>
-                    <?php
-                    echo $_SESSION['success'];
-                    unset($_SESSION['success'])
-                    ?>
-                    </h3>
-                </div>
-                <?php endif;?>
-            </div>
-
-            <div class="column">
-                <div class="sub-div">
-                    <div class="main">
-                        <div>
-                            <a><img src="images/main.jpg" alt="main"></a>
+                            <h2>Welcome <strong><?php echo $_SESSION['username'] ; ?> </strong>
+                        </h2>
+                        <?php endif; ?>
+                            <a class="w">We prioritise your</a>
+                            <h1>NEW SMILE</h1>
+                            <!--<button class="ta" href="#">Read more</button>-->    
                         </div>
                     </div>
-                </div>
-                <div class="sub-div">
+                    <?php if(isset($_SESSION['success'])):?>
                     <div>
-                        <a class="cta" href="schedules.php">Book an appointment today!</a>
+                        <h3>
+                        <?php
+                        echo $_SESSION['success'];
+                        unset($_SESSION['success'])
+                        ?>
+                        </h3>
+                    </div>
+                    <?php endif;?>
+                </div>
+
+                <div class="column">
+                    <div class="sub-div">
+                        <div class="main">
+                            <div>
+                                <a><img src="images/main.jpg" alt="main"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sub-div">
+                        <div>
+                            <a class="cta" href="schedules.php">Book an appointment today!</a>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -106,7 +106,7 @@
             
             if(mysqli_query($db, $reqAppt))
             // header("location: appointments.php?patient=$pic");
-            header("location: appointment.php?patient=$pic");
+            header("location: appointments1.php?patientID=$pic");
             // Make appointments.php not redirect to index.php
         }
     }
