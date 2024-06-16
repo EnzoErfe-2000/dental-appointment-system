@@ -175,6 +175,7 @@ nav {
   background-color: #333;
   transition: right 0.3s ease-in-out;
   font-family: "Montserrat", sans-serif;
+  z-index: 1000;
 }
 
 .sidebar.active {

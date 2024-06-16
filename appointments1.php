@@ -262,7 +262,11 @@
   ?>
 
     <div class="content-section not-block" style="width:85%; max-width:fit-content; overflow-x:scroll;">
-    <h3>Appointments for <?php echo $row0['patientName'];?></h3><br><br>
+    <?php 
+    if (mysqli_num_rows($resPName) > 0) {
+        echo "<h3>Appointments for ".$row0['patientName']."</h3>";
+    }?>
+    <br><br>
     <?php
             // $query = "SELECT * FROM appointment WHERE patient_id='".$_GET['patientID']."'";
             $query = "SELECT a.*, b.patientID, c.clinic_location FROM appointment a JOIN patient b JOIN clinic c ON a.clinic_id = c.clinic_id AND a.patient_id = b.patientID WHERE b.patientIC = '".$_GET['patientID']."'";
