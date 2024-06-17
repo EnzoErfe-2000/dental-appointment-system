@@ -13,6 +13,12 @@
     //     header("location: login.php");
 
     // }
+    $isDentist = false;
+    if (isset($_SESSION['role'])){
+        if ($_SESSION['role'] == 'dentist') {
+            $isDentist = true;
+        }
+    }
     if(isset($_GET['delete']) && $_SESSION['role'] == 'patient') #delete pending appointment
     {
         $id = $_GET['delete'];
@@ -131,7 +137,7 @@
     }
     if(isset($_GET['confirm']))
     {
-        if($_SESSION['role'] == 'dentist')
+        if($isDentist == true)
         {
             $id = $_GET['confirm'];
             $update_query = "UPDATE appointment SET status = 'Confirmed' WHERE appt_id='".$id."'";
@@ -333,7 +339,7 @@
     if(isset($_SESSION['username']))
     {
         // echo $_SESSION['role'];
-        if ($_SESSION['role'] == 'dentist') {
+        if ($isDentist == true) {
             // echo $_SESSION['username'];
             $reqName = "SELECT dentist_id, dentist_name FROM dentist WHERE user_username = '".$_SESSION['username']."' LIMIT 1";  
             // echo $reqDentistID;
@@ -360,7 +366,7 @@
     // if (mysqli_num_rows($resPName) > 0) {
     if (mysqli_num_rows($resName) > 0) {
         echo "<h3>Appointments for ";
-        if ($_SESSION['role'] == 'dentist') {
+        if ($isDentist == true){   
             echo $row0['dentist_name'];
             $dentistID = $row0['dentist_id'];
         }
@@ -372,9 +378,8 @@
     <br><br>
     <?php
             // $query = "SELECT * FROM appointment WHERE patient_id='".$_GET['patientID']."'";
-            
-            if ($_SESSION['role'] == 'dentist') {
-                $query = "SELECT a.*, c.clinic_location FROM appointment a JOIN clinic c ON a.clinic_id = c.clinic_id WHERE a.dentist_id = '".$dentistID."'";
+            if ($isDentist == true){
+                    $query = "SELECT a.*, c.clinic_location FROM appointment a JOIN clinic c ON a.clinic_id = c.clinic_id WHERE a.dentist_id = '".$dentistID."'";
             }
             else {
                 $query = "SELECT a.*, b.patientID, c.clinic_location FROM appointment a JOIN patient b JOIN clinic c ON a.clinic_id = c.clinic_id AND a.patient_id = b.patientID WHERE b.patientIC = '".$_GET['patientID']."'";
@@ -388,7 +393,7 @@
                 echo "<h4>Your Appointments</h4>";
                 echo "<table>
                 <tr>";
-                if ($_SESSION['role'] != 'dentist') {
+                if ($isDentist != true) {
                     echo "<th>Dentist</th>
                     <th>Location</th>";
                 }
@@ -413,7 +418,7 @@
                         // echo $row['appt_id']."<br>";
                         echo "
                         <tr class='flex' id=".$row['appt_id'].">";
-                        if ($_SESSION['role'] != 'dentist') {
+                        if ($isDentist != true) {
                             echo "<td>Dr. ".$row2['dentist_name']."</td>
                             <td>".$row['clinic_location']."</td>";
                         }
@@ -421,7 +426,7 @@
                             <td>".$row['appt_date']."<br>".$row['appt_time']."HRS</td>
                             <td>".$row['appt_reason']."</td>
                             <td>".$row['status'];
-                        if ($_SESSION['role'] == 'dentist') {
+                        if ($isDentist == true){
                             echo "<br'>
                             <div style='padding-top:10px;'>
                                 <button style='padding:8px;"; if ($row['status'] == 'Confirmed') {echo "display:none";} echo "' onClick='showPopup(".$row['appt_id'].", 1)'>

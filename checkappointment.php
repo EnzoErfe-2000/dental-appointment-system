@@ -14,7 +14,7 @@ if(isset($_GET['logout'])){
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title>Home</title>
+        <title>Check Appointments</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="description" content="">
