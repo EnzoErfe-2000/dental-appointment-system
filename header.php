@@ -8,9 +8,9 @@
     <!-- Sidebar menu -->
     <ul>
         <li><a href="index.php">Home</a></li>
-        <li><a href="schedules.php">Create An Appointment</a></li>
-        <li><a href="checkappointment.php">Check My Appointment</a></li>
-        <li><a href="login1.php">Login</a></li>
+        <li><a href="schedules.php">Book Appointment</a></li>
+        <li><a href="checkappointment.php">Check Appointments</a></li>
+        <li><a href="login1.php">Admin Login</a></li>
     </ul>
 </div>
 
@@ -32,10 +32,10 @@
         <ul class="nav__links">
             <li><a href="index.php">Home</a></li>
             <?php if(!isset($_SESSION['username'])){?> 
-            <!-- <li><a href="registration.php">Sign up</a></li>	 -->
-            <li><a href="schedules.php">Create An Appointment</a></li>	
-            <li><a href="checkappointment.php">Check My Appointment</a></li>
-            <li><a class="cta" href="login1.php">Login</a></li>
+                <!-- <li><a href="registration.php">Sign up</a></li>	 -->
+                <li><a href="schedules.php">Book Appointment</a></li>	
+                <li><a href="checkappointment.php">Check Appointments</a></li>
+                <li><a class="cta" href="login1.php">Admin Login</a></li>
             <?php }?>
             <?php if(isset($_SESSION['username'])){
                 if($_SESSION['role'] == 'admin')
@@ -48,10 +48,11 @@
                 {
                     echo "<li><a href='clinics.php'>Clinics </a></li>";
                 }
+                
+                echo "<li><a href='appointments1.php?username'".$_SESSION['username'].">Appointments</a></li>";
             ?> 	
-            
-            <li><a href="appointments.php">Appointments</a></li>
             <li><a href="pastappointments.php">Past Appointments</a></li>
+            
             <?php if($_SESSION['role'] == 'patient'){
                 echo "<li><a href='updateaccount.php'>Update Account</a></li>";
             }}?>

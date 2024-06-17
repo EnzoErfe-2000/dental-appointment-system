@@ -3,7 +3,7 @@ session_start();
 $db = mysqli_connect('localhost','root','','dcms') or die("could not connect to database");
 if(isset($_SESSION['username']))
 header('location:index.php');
-//echo $_SESSION['redirect'];
+// echo $_SESSION['redirect'];
 $username="";
 $count1=0;
 $errors=[];
@@ -12,20 +12,22 @@ $errors=[];
     {
       $username = mysqli_real_escape_string($db, $_POST ['username']);
       $password = mysqli_real_escape_string($db, $_POST['password']);
-      $role = mysqli_real_escape_string($db, $_POST['role']);
+      // $role = mysqli_real_escape_string($db, $_POST['role']);
       if(!empty($username) && !empty($password))
       {
         $password= hash('sha256',$password);
-        $query = "SELECT * FROM user WHERE username='$username' and password='$password' and role = '$role' LIMIT 1";
+        // $query = "SELECT * FROM user WHERE username='$username' and password='$password' and role = '$role' LIMIT 1";
+        $query = "SELECT * FROM user WHERE username='$username' and password='$password' LIMIT 1";
         $results = mysqli_query($db, $query);
         $res = mysqli_fetch_assoc($results);
-        if($res['ulevel'] == 1){
-          echo "student";
-        } else "generic error";
-        if($username == $res['username'] && $password==$res['password'] && $role == $res['role'])
+        // if($res['ulevel'] == 1){
+        //   echo "student";
+        // } else "generic error";
+        // if($username == $res['username'] && $password==$res['password'] && $role == $res['role'])
+        if($username == $res['username'] && $password==$res['password'])
         {
             $_SESSION['username']=$username;
-            $_SESSION['role'] = $role;
+            $_SESSION['role'] = $res['role'];
             if(isset($_SESSION['redirect']))
             {
                 echo "inside redirect";
@@ -79,12 +81,13 @@ $errors=[];
                 <form method="POST" class="register-form" id="login-form">
                     <div class="form-group">
                         <label for="username"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                        <input type="text" name="username" id="your_name" placeholder="Username"/>
+                        <input type="text" name="username" id="your_name" placeholder="Username" required/>
                     </div>
                     <div class="form-group">
                         <label for="password"><i class="zmdi zmdi-lock"></i></label>
-                        <input type="password" name="password" id="your_pass" placeholder="Password"/>
+                        <input type="password" name="password" id="your_pass" placeholder="Password" required/>
                     </div>
+                    <!-- 
                     <div class="form-group">
                     <label style="font-size:18px">Select the type of user</label><br></div>
                     <div class="form-group">
@@ -96,17 +99,18 @@ $errors=[];
                     <p style="color:white">Patient</p>
                     <input type="radio" name="role" id="patient" value="patient" required style="width:60%">
                     <label for="patient" style="font-weight:normal; font-size:16px">Patient</label><br>
-                    </div>	
+                    </div> 
                     <div class="form-group">
                     <p style="color:white">Admin</p>
                     <input type="radio" name="role" id="admin" value="admin" required style="width:60%">
                     <label for="patient" style="font-weight:normal; font-size:16px">Admin</label><br>
-                    </div>	
+                    </div>
+                    -->
                     <div class="form-group form-button">
                         <input type="submit" class="example_e" name="login_user" id="signin" value="Login"/>
                     </div>
                 </form>
-              
+
             </div>
         </div>
     </div>

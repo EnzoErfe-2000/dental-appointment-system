@@ -11,6 +11,7 @@
     // {
     //     $_SESSION['redirect'] = 'appointments.php';
     //     header("location: login.php");
+
     // }
     if(isset($_GET['delete']) && $_SESSION['role'] == 'patient') #delete pending appointment
     {
@@ -245,31 +246,67 @@
 </head>
 <body>
     <center>
+    
     <!-- Popup dialog -->
     <div id="cancel-popup" class="cancel-popup">
         <p>Are you sure you want to cancel your application? Any unsaved changes will be lost.</p>
         <a href="#" onclick="closePopup()" style="color:dodgerblue">Keep Application</a>
         <a href="#" onclick="cancelApplication()" style="color:red">Cancel Application</a>
     </div>
+    
     <!-- Overlay -->
     <div id="cancel-overlay" class="cancel-overlay"></div>
-  <?php require_once("header.php");
-  $reqPName = "SELECT patientName FROM patient WHERE patientIC = '".$_GET['patientID']."' LIMIT 1";  
-//   echo $reqPName."<br>";
-  $resPName = mysqli_query($db, $reqPName);
-  $row0 = mysqli_fetch_assoc($resPName);
-//   echo $row0['patientName']."<br>";
+
+    <?php require_once("header.php");
+    if(isset($_SESSION['username']))
+    {
+        // echo $_SESSION['role'];
+        if ($_SESSION['role'] == 'dentist') {
+            // echo $_SESSION['username'];
+            $reqName = "SELECT dentist_id, dentist_name FROM dentist WHERE user_username = '".$_SESSION['username']."' LIMIT 1";  
+            // echo $reqDentistID;
+            // $resName = mysqli_query($db, $reqName);
+            // $row0 = mysqli_fetch_assoc($resName);
+            // echo $row0['dentist_id']."<br>";
+            // echo $row0['dentist_name']."<br>";
+        }
+    }
+    else {
+        // $reqPName = "SELECT patientName FROM patient WHERE patientIC = '".$_GET['patientID']."' LIMIT 1";  
+        $reqName = "SELECT patientName FROM patient WHERE patientIC = '".$_GET['patientID']."' LIMIT 1";  
+        //   echo $reqPName."<br>";
+        // $resPName = mysqli_query($db, $reqPName);
+        // $row0 = mysqli_fetch_assoc($resPName);
+        //   echo $row0['patientName']."<br>";
+    }
+    $resName = mysqli_query($db, $reqName);
+    $row0 = mysqli_fetch_assoc($resName);
   ?>
 
     <div class="content-section not-block" style="width:85%; max-width:fit-content; overflow-x:scroll;">
     <?php 
-    if (mysqli_num_rows($resPName) > 0) {
-        echo "<h3>Appointments for ".$row0['patientName']."</h3>";
+    // if (mysqli_num_rows($resPName) > 0) {
+    if (mysqli_num_rows($resName) > 0) {
+        echo "<h3>Appointments for ";
+        if ($_SESSION['role'] == 'dentist') {
+            echo $row0['dentist_name'];
+            $dentistID = $row0['dentist_id'];
+        }
+        else {
+            echo $row0['patientName'];
+        }
+        echo "</h3>";
     }?>
     <br><br>
     <?php
             // $query = "SELECT * FROM appointment WHERE patient_id='".$_GET['patientID']."'";
-            $query = "SELECT a.*, b.patientID, c.clinic_location FROM appointment a JOIN patient b JOIN clinic c ON a.clinic_id = c.clinic_id AND a.patient_id = b.patientID WHERE b.patientIC = '".$_GET['patientID']."'";
+            
+            if ($_SESSION['role'] == 'dentist') {
+                $query = "SELECT a.*, c.clinic_location FROM appointment a JOIN patient b JOIN clinic c ON a.clinic_id = c.clinic_id WHERE a.dentist_id = '".$dentistID."'";
+            }
+            else {
+                $query = "SELECT a.*, b.patientID, c.clinic_location FROM appointment a JOIN patient b JOIN clinic c ON a.clinic_id = c.clinic_id AND a.patient_id = b.patientID WHERE b.patientIC = '".$_GET['patientID']."'";
+            }
             // echo $query."<br>";
             $result = mysqli_query($db, $query);
             if($result == false || mysqli_num_rows($result) == 0)
@@ -278,14 +315,16 @@
             {
                 echo "<h4>Your Appointments</h4>";
                 echo "<table>
-                <tr>
-                    <th>Dentist</th>
-                    <th>Location</th>
-                    <th>Date</th>
-                    <th>Time</th>
+                <tr>";
+                if ($_SESSION['role'] != 'dentist') {
+                    echo "<th>Dentist</th>
+                    <th>Location</th>";
+                }
+                echo"
+                    <th>Date/Time</th>
                     <th>Purpose</th>
                     <th>Status</th>
-                    <th>Invoice</th>
+                    <th>Invoice/Actions</th>
                     </tr>";
                 while($row = mysqli_fetch_assoc($result))
                 {
@@ -301,22 +340,42 @@
                         $url = "appointments.php?cancel=".$row['appt_id'];
                         // echo $row['appt_id']."<br>";
                         echo "
-                        <tr class='flex'>
-                            <td>Dr. ".$row2['dentist_name']."</td>
-                            <td>".$row['clinic_location']."</td>
-                            <td>".$row['appt_date']."</td>
-                            <td>".$row['appt_time']."HRS</td>
+                        <tr class='flex'>";
+                        if ($_SESSION['role'] != 'dentist') {
+                            echo "<td>Dr. ".$row2['dentist_name']."</td>
+                            <td>".$row['clinic_location']."</td>";
+                        }
+                        echo"
+                            <td>".$row['appt_date']."<br>".$row['appt_time']."HRS</td>
                             <td>".$row['appt_reason']."</td>
-                            <td>".$row['status']."</td>
-                            <td><button style='padding:8px;'><a href='appointmentinvoice.php?appt=".$row['appt_id']."'><i class='fa fa-file-text'></i></a></button></td>
+                            <td>".$row['status'];
+                        if ($_SESSION['role'] == 'dentist') {
+                            echo "<br'>
+                            <div style='padding-top:10px;'>
+                                <button style='padding:8px;'>
+                                    <i class='fa fa-check' style='color:green'></i>
+                                </button>
+                                <button style='padding:8px;'>
+                                    <i class='fa fa-times' style='color:red'></i>
+                                </button>
+                            </div>";
+                        }
+                        echo "</td>
+                            <td><button style='padding:8px;'><a href='appointmentinvoice.php?appt=".$row['appt_id']."'><i class='fa fa-file-text'></i></a></button>
                             ";
                         if($row['status'] == 'Pending' || $row['status'] == 'Confirmed')
                         // echo "<td><a href='".$url."' style='color:red' onClick='cancelApplication()'>Cancel Appointment</a></td></tr>";
                         echo "
-                        <td><a href='reschedule.php?appt=".$row['appt_id']."' disabled>Reschedule</a></td>
-                        <td><a href='#' style='color:red' onClick='showPopup(".$row['appt_id'].")'>Cancel</a></td></tr>";
+                        <div style='display:flex; gap:8px'>
+                        <button style='padding:8px;'>
+                        <a href='reschedule.php?appt=".$row['appt_id']."' disabled>Reschedule</a>
+                        </button>
+                        <button style='padding:8px;'>
+                        <a href='#' style='color:red' onClick='showPopup(".$row['appt_id'].")'>Cancel</a></td></tr>
+                        </button>
+                        </div>";
                         else
-                        echo "</tr>";
+                        echo "</td></tr>";
                     }
 
                 }
