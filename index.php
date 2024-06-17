@@ -6,8 +6,9 @@ if(isset($_GET['logout'])){
     session_destroy();
     unset($_SESSION['username']);
     unset($_SESSION['role']);
+    unset($_SESSION['dentistName']);
     //unset($_COOKIE['remember']);
-    header("location: login.php");
+    header("location: login1.php");
 }
 
 ?>
@@ -72,7 +73,14 @@ if(isset($_GET['logout'])){
                     </div>
                     <div class="sub-div">
                         <div>
-                            <a class="cta" href="schedules.php">Book an appointment today!</a>
+                        <?php 
+                        if (isset($_SESSION['username'])){ 
+                            echo "<a class='cta' href='makeappointment1.php?dentist=".$_SESSION['dentistName']."'>Create an appointment for Dr. ".$_SESSION['dentistName']."</a>";
+                        } 
+                        else {
+                            echo "<a class='cta' href='schedules.php'>Book an appointment today!</a>";
+                            echo "";
+                         }?>
                         </div>
                     </div>
                 </div>

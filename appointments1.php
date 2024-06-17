@@ -429,10 +429,10 @@
                         if ($isDentist == true){
                             echo "<br'>
                             <div style='padding-top:10px;'>
-                                <button style='padding:8px;"; if ($row['status'] == 'Confirmed') {echo "display:none";} echo "' onClick='showPopup(".$row['appt_id'].", 1)'>
+                                <button style='padding:8px;"; if ($row['status'] == 'Confirmed' || $row['status'] == 'Cancelled') {echo "display:none";} echo "' onClick='showPopup(".$row['appt_id'].", 1)'>
                                     <i class='fa fa-check' style='color:green'></i>
                                 </button>
-                                <button style='padding:8px;"; if ($row['status'] == 'Rejected') {echo "display:none";} echo "' onClick='showPopup(".$row['appt_id'].", 2)'>
+                                <button style='padding:8px;"; if ($row['status'] == 'Rejected' || $row['status'] == 'Cancelled') {echo "display:none";} echo "' onClick='showPopup(".$row['appt_id'].", 2)'>
                                     <i class='fa fa-times' style='color:red'></i>
                                 </button>
                             </div>";

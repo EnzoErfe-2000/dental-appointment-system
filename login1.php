@@ -17,30 +17,59 @@ $errors=[];
       {
         $password= hash('sha256',$password);
         // $query = "SELECT * FROM user WHERE username='$username' and password='$password' and role = '$role' LIMIT 1";
-        $query = "SELECT * FROM user WHERE username='$username' and password='$password' LIMIT 1";
+        $query = "SELECT * FROM user WHERE username='$username' AND password='$password' LIMIT 1";
         $results = mysqli_query($db, $query);
-        $res = mysqli_fetch_assoc($results);
-        // if($res['ulevel'] == 1){
-        //   echo "student";
-        // } else "generic error";
-        // if($username == $res['username'] && $password==$res['password'] && $role == $res['role'])
-        if($username == $res['username'] && $password==$res['password'])
-        {
-            $_SESSION['username']=$username;
-            $_SESSION['role'] = $res['role'];
-            if(isset($_SESSION['redirect']))
-            {
-                echo "inside redirect";
-                $link = $_SESSION['redirect'];
-                unset($_SESSION['redirect']);
-                echo "location:$link";
-                header("location:$link");
+
+        if ($results) {
+            // Check if exactly one row matches the username and password
+            if (mysqli_num_rows($results) == 1) {
+                $res = mysqli_fetch_assoc($results);
+
+                // Verify username and password match
+                if ($username == $res['username'] && $password == $res['password']) {
+                    $_SESSION['username'] = $username;
+                    $_SESSION['role'] = $res['role'];
+
+                    if ($res['role'] == 'dentist') {
+                        // Fetch dentist's name if role is dentist
+                        $reqDentistName = "SELECT dentist_name FROM dentist WHERE user_username = '$username'";
+                        $resDentistName = mysqli_query($db, $reqDentistName);
+                        
+                        if ($resDentistName) {
+                            if (mysqli_num_rows($resDentistName) == 1) {
+                                $row = mysqli_fetch_assoc($resDentistName);
+                                $_SESSION['dentistName'] = $row['dentist_name'];
+                            } else {
+                                $_SESSION['dentistName'] = "Unknown Dentist";
+                            }
+                        } else {
+                            echo "Error executing dentist query: " . mysqli_error($db);
+                            exit; // Exit script after displaying error
+                        }
+                    }
+
+                    // Redirect if there's a redirection URL in session
+                    if (isset($_SESSION['redirect'])) {
+                        $link = $_SESSION['redirect'];
+                        unset($_SESSION['redirect']);
+                        header("Location: $link");
+                        exit; // Ensure script stops after redirection header
+                    } else {
+                        header('Location: index.php');
+                        exit; // Ensure script stops after redirection header
+                    }
+                } else {
+                    // Invalid credentials
+                    array_push($errors, "Invalid credentials entered");
+                }
+            } else {
+                // No rows found matching username and password
+                array_push($errors, "Invalid credentials entered");
             }
-            header('location:index.php');
-        }
-        else{
-          array_push($errors, "Invalid credentials entered");
-          #echo "<h3 style='color:red; width:50%'></h3><br>";
+        } else {
+            // Query execution failed
+            echo "Error executing main query: " . mysqli_error($db);
+            exit; // Exit script after displaying error
         }
       }
     }

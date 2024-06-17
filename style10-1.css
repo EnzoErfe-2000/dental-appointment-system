@@ -144,3 +144,7 @@ textarea:focus {
   color: #333;
   cursor: pointer;
 }
+
+.readonly {
+  background-color: powderblue;
+}

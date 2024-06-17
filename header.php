@@ -51,7 +51,7 @@
                 
                 echo "<li><a href='appointments1.php?username'".$_SESSION['username'].">Appointments</a></li>";
             ?> 	
-            <li><a href="pastappointments.php">Past Appointments</a></li>
+            <li><a href="pastappointments1.php">Past Appointments</a></li>
             
             <?php if($_SESSION['role'] == 'patient'){
                 echo "<li><a href='updateaccount.php'>Update Account</a></li>";

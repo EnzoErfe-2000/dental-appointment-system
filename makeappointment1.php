@@ -21,21 +21,26 @@
         $pphone = mysqli_real_escape_string($db, $_POST['phone_value']);
         $paddress = mysqli_real_escape_string($db, $_POST['address_value']);
         $pmedical = mysqli_real_escape_string($db, $_POST['comments']);
-        $dname = mysqli_real_escape_string($db, $dentist_name);
+        $dname = substr(mysqli_real_escape_string($db, $_POST['dname']), 4);
         $locn = mysqli_real_escape_string($db, $_POST['clinic']);
         $date_val = mysqli_real_escape_string($db, $_POST['txtDate']);
-        $t1 = substr($_POST['time'], 0, 2)."00";
+        if (strlen($_POST['time']) == 5)
+        $t1 = substr($_POST['time'], 0, 2).substr($_POST['time'], 3, 2);
+        else 
+        $t1 = substr($_POST['time'], 0, 2).substr($_POST['time'], 2, 2);
         $hr = mysqli_real_escape_string($db, $t1);
         $reason = mysqli_real_escape_string($db, $_POST['reason']);
 
         // $checkq = "SELECT * FROM appointment WHERE uname = '$uname' AND time='$hr' AND date='$date_val' AND (status='Pending' OR status='Confirmed')";
-        $checkq = "SELECT * FROM appointment WHERE patient_name = '$pname' AND time='$hr' AND date='$date_val' AND (status='Pending' OR status='Confirmed')";
-        $checkq2 = "SELECT * FROM appointment WHERE dname = '$dname' AND time='$hr' AND date='$date_val' AND status='Confirmed'";
+        // $checkq = "SELECT * FROM appointment WHERE patient_name = '$pname' AND time='$hr' AND date='$date_val' AND (status='Pending' OR status='Confirmed')";
+        // $checkq2 = "SELECT * FROM appointment WHERE dname = '$dname' AND time='$hr' AND date='$date_val' AND status='Confirmed'";
+        $checkq = "SELECT a.* FROM appointment a INNER JOIN patient b ON a.patient_id = b.patientID WHERE patientIC = '$pic' AND appt_time='$t1' AND appt_date='$date_val' AND (status='Pending' OR status='Confirmed')";
+        $checkq2 = "SELECT a.* FROM appointment a INNER JOIN dentist b ON a.dentist_id = b.dentist_id WHERE dentist_name = '$dname' AND appt_time='$t1' AND appt_date='$date_val' AND status='Confirmed'";
         // echo $checkq2;
         // TODO
         // If patient's first appointment, create new patient 
         $checkExUser = "SELECT * FROM patient WHERE patientIC = '$pic'";
-        echo $checkExUser."<br>";
+        // echo $checkExUser."<br>";
         
         $res = mysqli_query($db, $checkq);
         $res2 = mysqli_query($db, $checkq2);
@@ -102,7 +107,7 @@
             
             // TODO Create appointment 
             $reqAppt = "INSERT INTO appointment(dentist_id, patient_id, clinic_id, appt_date, appt_time, appt_reason) VALUES ('$did', '$pid', '$cid', '$date_val', '$hr', '$reason')"; 
-            echo $reqAppt."<br>";
+            // echo $reqAppt."<br>";
             
             if(mysqli_query($db, $reqAppt))
             // header("location: appointments.php?patient=$pic");
@@ -271,7 +276,6 @@
             </form>";
         }
         ?>
-        </table>
     </div>
     </center>
 </body>
