@@ -110,7 +110,7 @@ textarea:focus {
 }
 
 /* Styling for the popup */
-.cancel-popup {
+.popup {
   display: none; /* Hide initially */
   position: fixed;
   left: 50%;
@@ -124,7 +124,7 @@ textarea:focus {
 }
 
 /* Styling for overlay */
-.cancel-overlay {
+.popup-overlay {
   display: none; /* Hide initially */
   position: fixed;
   top: 0;
@@ -136,7 +136,7 @@ textarea:focus {
 }
 
 /* Center align text in links */
-.cancel-popup a {
+.popup a {
   display: inline-block;
   margin: 0 10px;
   padding: 8px 20px;

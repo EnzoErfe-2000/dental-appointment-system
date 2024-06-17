@@ -26,33 +26,35 @@
         $cancel_query = "UPDATE appointment SET status = 'Rejected' WHERE appt_id='".$id."'";
         mysqli_query($db, $cancel_query);
         unset($_GET['reject']);
-        $q3 = "SELECT * from appointment where appt_id='".$id."'";
-        $res3 = mysqli_query($db, $q3);
-        $row3 = mysqli_fetch_assoc($res3);
-        $q4 = "SELECT name from dentist where username='".$row3['dname']."' limit 1";
-        $res4 = mysqli_query($db, $q4);
-        $row4 = mysqli_fetch_assoc($res4);
-        $q5 = "SELECT email from user where username='".$row3['uname']."' limit 1";
-        $res5 = mysqli_query($db, $q5);
-        $row5 = mysqli_fetch_assoc($res5);
-        $mail = new PHPMailer;
-        $mail->IsSMTP();
-        $mail->SMTPAuth = true;
-        $mail->Host = "tls://smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->Username = "username@email.com";
-        $mail->Password = "password";
-        //Sending the actual email
-        $mail->setFrom('noreply@demo.com', 'Dental King');
-        $mail->addAddress($row5['email']);     // Add a recipient
-        $mail->isHTML(false);                                  // Set email format to HTML
-        $mail->Subject = 'Appointment Rejection';
-        $mail->Body = 'Your pending appointment with Dr. '.$row4['name']. ' at '.$row3['time'].'hrs on '.$row3['date'].' has been rejected';
-        if(!$mail->send()) {
-            echo 'Message could not be sent. ';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
-            exit;
-        }
+        
+        // EMAIL
+        // $q3 = "SELECT * from appointment where appt_id='".$id."'";
+        // $res3 = mysqli_query($db, $q3);
+        // $row3 = mysqli_fetch_assoc($res3);
+        // $q4 = "SELECT name from dentist where username='".$row3['dname']."' limit 1";
+        // $res4 = mysqli_query($db, $q4);
+        // $row4 = mysqli_fetch_assoc($res4);
+        // $q5 = "SELECT email from user where username='".$row3['uname']."' limit 1";
+        // $res5 = mysqli_query($db, $q5);
+        // $row5 = mysqli_fetch_assoc($res5);
+        // $mail = new PHPMailer;
+        // $mail->IsSMTP();
+        // $mail->SMTPAuth = true;
+        // $mail->Host = "tls://smtp.gmail.com";
+        // $mail->Port = 587;
+        // $mail->Username = "username@email.com";
+        // $mail->Password = "password";
+        // //Sending the actual email
+        // $mail->setFrom('noreply@demo.com', 'Dental King');
+        // $mail->addAddress($row5['email']);     // Add a recipient
+        // $mail->isHTML(false);                                  // Set email format to HTML
+        // $mail->Subject = 'Appointment Rejection';
+        // $mail->Body = 'Your pending appointment with Dr. '.$row4['name']. ' at '.$row3['time'].'hrs on '.$row3['date'].' has been rejected';
+        // if(!$mail->send()) {
+        //     echo 'Message could not be sent. ';
+        //     echo 'Mailer Error: ' . $mail->ErrorInfo;
+        //     exit;
+        // }
     }
     if(isset($_GET['cancel']))
     {
@@ -132,60 +134,62 @@
         if($_SESSION['role'] == 'dentist')
         {
             $id = $_GET['confirm'];
-            $cancel_query = "UPDATE appointment SET status = 'Confirmed' WHERE appt_id='".$id."'";
-            mysqli_query($db, $cancel_query);
+            $update_query = "UPDATE appointment SET status = 'Confirmed' WHERE appt_id='".$id."'";
+            mysqli_query($db, $update_query);
             unset($_GET['confirm']);
-            $q2 = "SELECT name from dentist where username='".$_SESSION['username']."' limit 1";
-            $res2 = mysqli_query($db, $q2);
-            $row2 = mysqli_fetch_assoc($res2);
-            $q3 = "SELECT * from appointment where appt_id='".$id."'";
-            $res3 = mysqli_query($db, $q3);
-            $row3 = mysqli_fetch_assoc($res3);
-            $q4 = "SELECT * from useraccount where username='".$row3['uname']."'";
-            $res4 = mysqli_query($db, $q4);
-            $row4 = mysqli_fetch_assoc($res4);
-            $q6 = "SELECT email from user where username='".$row3['dname']."' limit 1";
-            $res6 = mysqli_query($db, $q6);
-            $row6 = mysqli_fetch_assoc($res6);
-            $q7 = "SELECT email from user where username='".$row3['uname']."' limit 1";
-            $res7 = mysqli_query($db, $q7);
-            $row7 = mysqli_fetch_assoc($res7);
-            $mail = new PHPMailer;
-            $mail->IsSMTP();
-            $mail->SMTPAuth = true;
-            $mail->Host = "tls://smtp.gmail.com";
-            $mail->Port = 587;
-            $mail->Username = "username@email.com";
-            $mail->Password = "password";
-            $mail->setFrom('noreply@demo.com', 'Dental King');
-            $mail->addAddress($row7['email']); 
-            $mail->isHTML(false);
-            $mail->Subject = 'Appointment Confirmation';
-            $mail->Body = 'Your pending appointment with Dr. '.$row2['name']." at ".$row3['time']."hrs on ".$row3['date']." has been confirmed";
+            
+            // Email
+            // $q2 = "SELECT name from dentist where username='".$_SESSION['username']."' limit 1";
+            // $res2 = mysqli_query($db, $q2);
+            // $row2 = mysqli_fetch_assoc($res2);
+            // $q3 = "SELECT * from appointment where appt_id='".$id."'";
+            // $res3 = mysqli_query($db, $q3);
+            // $row3 = mysqli_fetch_assoc($res3);
+            // $q4 = "SELECT * from useraccount where username='".$row3['uname']."'";
+            // $res4 = mysqli_query($db, $q4);
+            // $row4 = mysqli_fetch_assoc($res4);
+            // $q6 = "SELECT email from user where username='".$row3['dname']."' limit 1";
+            // $res6 = mysqli_query($db, $q6);
+            // $row6 = mysqli_fetch_assoc($res6);
+            // $q7 = "SELECT email from user where username='".$row3['uname']."' limit 1";
+            // $res7 = mysqli_query($db, $q7);
+            // $row7 = mysqli_fetch_assoc($res7);
+            // $mail = new PHPMailer;
+            // $mail->IsSMTP();
+            // $mail->SMTPAuth = true;
+            // $mail->Host = "tls://smtp.gmail.com";
+            // $mail->Port = 587;
+            // $mail->Username = "username@email.com";
+            // $mail->Password = "password";
+            // $mail->setFrom('noreply@demo.com', 'Dental King');
+            // $mail->addAddress($row7['email']); 
+            // $mail->isHTML(false);
+            // $mail->Subject = 'Appointment Confirmation';
+            // $mail->Body = 'Your pending appointment with Dr. '.$row2['name']." at ".$row3['time']."hrs on ".$row3['date']." has been confirmed";
 
-            if(!$mail->send()) {
-                echo 'Message could not be sent. ';
-                echo 'Mailer Error: ' . $mail->ErrorInfo;
-                exit;
-            }
-            $mail = new PHPMailer;
-            $mail->IsSMTP();
-            $mail->SMTPAuth = true;
-            $mail->Host = "tls://smtp.gmail.com";
-            $mail->Port = 587;
-            $mail->Username = "username@email.com";
-            $mail->Password = "password";
-            $mail->setFrom('noreply@demo.com', 'Dental King');
-            $mail->addAddress($row6['email']);
-            $mail->isHTML(false);
-            $mail->Subject = 'Appointment Confirmation';
-            $mail->Body = 'Your pending appointment with '.$row4['name']." at ".$row3['time']."hrs on ".$row3['date']." has been confirmed";
+            // if(!$mail->send()) {
+            //     echo 'Message could not be sent. ';
+            //     echo 'Mailer Error: ' . $mail->ErrorInfo;
+            //     exit;
+            // }
+            // $mail = new PHPMailer;
+            // $mail->IsSMTP();
+            // $mail->SMTPAuth = true;
+            // $mail->Host = "tls://smtp.gmail.com";
+            // $mail->Port = 587;
+            // $mail->Username = "username@email.com";
+            // $mail->Password = "password";
+            // $mail->setFrom('noreply@demo.com', 'Dental King');
+            // $mail->addAddress($row6['email']);
+            // $mail->isHTML(false);
+            // $mail->Subject = 'Appointment Confirmation';
+            // $mail->Body = 'Your pending appointment with '.$row4['name']." at ".$row3['time']."hrs on ".$row3['date']." has been confirmed";
 
-            if(!$mail->send()) {
-                echo 'Message could not be sent. ';
-                echo 'Mailer Error: ' . $mail->ErrorInfo;
-                exit;
-            }
+            // if(!$mail->send()) {
+            //     echo 'Message could not be sent. ';
+            //     echo 'Mailer Error: ' . $mail->ErrorInfo;
+            //     exit;
+            // }
         }
     }
 ?>
@@ -213,18 +217,47 @@
     </style>
     <script>
         let currentAppointmentId = '';
+        let currentPopupType = '';
         // Function to show the popup and overlay
-        function showPopup(appointmentId) {
+        function showPopup(appointmentId, type) {
             currentAppointmentId = appointmentId;
-            document.getElementById('cancel-popup').style.display = 'block';
-            document.getElementById('cancel-overlay').style.display = 'block';
+            currentPopupType = type;
+
+            hideAllPopups();
+            // console.log(currentAppointmentId);
+            if (currentPopupType == 0) {
+                document.getElementById('cancel-popup').style.display = 'block';
+                // document.getElementById('popup-overlay').style.display = 'block';
+            }
+            else if (currentPopupType == 1) {
+                document.getElementById('confirm-popup').style.display = 'block';
+            }
+            else if (currentPopupType == 2) {
+                document.getElementById('reject-popup').style.display = 'block';
+            }
+            document.getElementById('popup-overlay').style.display = 'block';    
             return false; // Prevent default link behavior
         }
 
+        function hideAllPopups() {
+            // Hide all popups
+            var popups = document.querySelectorAll('.popup'); // Adjust class name if necessary
+
+            popups.forEach(function(popup) {
+                popup.style.display = 'none';
+            });
+
+            // Hide overlay
+            document.getElementById('popup-overlay').style.display = 'none';
+        }
+
         // Function to close the popup and overlay
-        function closePopup() {
-            document.getElementById('cancel-popup').style.display = 'none';
-            document.getElementById('cancel-overlay').style.display = 'none';
+        function closePopup(type) {
+            // if (type == 'cancel') {
+            //     document.getElementById('cancel-popup').style.display = 'none';
+            //     document.getElementById('popup-overlay').style.display = 'none';
+            // }
+            hideAllPopups();
             return false; // Prevent default link behavior
         }
 
@@ -238,7 +271,34 @@
             else {
                 alert('No Appointment ID found.')
             }
-            closePopup(); // Close the popup after action
+            // closePopup(); // Close the popup after action
+            hideAllPopups(); // Close the popup after action
+            return false; // Prevent default link behavior
+        }
+        
+        function confirmApplication() {
+            if (currentAppointmentId) {
+                // Add your logic here for cancelling the application
+                // alert('Application Cancelled! ID: ' + currentAppointmentId);
+                window.location.href = 'appointments1.php?confirm=' + currentAppointmentId;
+            }
+            else {
+                alert('No Appointment ID found.')
+            }
+            hideAllPopups(); // Close the popup after action
+            return false; // Prevent default link behavior
+        }
+        
+        function rejectApplication() {
+            if (currentAppointmentId) {
+                // Add your logic here for cancelling the application
+                // alert('Application Cancelled! ID: ' + currentAppointmentId);
+                window.location.href = 'appointments1.php?reject=' + currentAppointmentId;
+            }
+            else {
+                alert('No Appointment ID found.')
+            }
+            hideAllPopups(); // Close the popup after action
             return false; // Prevent default link behavior
         }
     </script>
@@ -248,14 +308,26 @@
     <center>
     
     <!-- Popup dialog -->
-    <div id="cancel-popup" class="cancel-popup">
+    <div id="cancel-popup" class="popup">
         <p>Are you sure you want to cancel your application? Any unsaved changes will be lost.</p>
-        <a href="#" onclick="closePopup()" style="color:dodgerblue">Keep Application</a>
-        <a href="#" onclick="cancelApplication()" style="color:red">Cancel Application</a>
+        <a href="#" onclick="closePopup()" style="color:red">Keep Application</a>
+        <a href="#" onclick="cancelApplication()" style="color:dodgerblue">Cancel Application</a>
     </div>
     
+    <div id="confirm-popup" class="popup">
+        <p>Approve this application?</p>
+        <a href="#" onclick="closePopup()" style="color:red">Cancel</a>
+        <a href="#" onclick="confirmApplication()" style="color:dodgerblue">Approve Application</a>
+    </div>
+
+    <div id="reject-popup" class="popup">
+        <p>Reject this application?</p>
+        <a href="#" onclick="closePopup()" style="color:red">Cancel</a>
+        <a href="#" onclick="rejectApplication()" style="color:dodgerblue">Reject Application</a>
+    </div>
+
     <!-- Overlay -->
-    <div id="cancel-overlay" class="cancel-overlay"></div>
+    <div id="popup-overlay" class="popup-overlay"></div>
 
     <?php require_once("header.php");
     if(isset($_SESSION['username']))
@@ -302,7 +374,7 @@
             // $query = "SELECT * FROM appointment WHERE patient_id='".$_GET['patientID']."'";
             
             if ($_SESSION['role'] == 'dentist') {
-                $query = "SELECT a.*, c.clinic_location FROM appointment a JOIN patient b JOIN clinic c ON a.clinic_id = c.clinic_id WHERE a.dentist_id = '".$dentistID."'";
+                $query = "SELECT a.*, c.clinic_location FROM appointment a JOIN clinic c ON a.clinic_id = c.clinic_id WHERE a.dentist_id = '".$dentistID."'";
             }
             else {
                 $query = "SELECT a.*, b.patientID, c.clinic_location FROM appointment a JOIN patient b JOIN clinic c ON a.clinic_id = c.clinic_id AND a.patient_id = b.patientID WHERE b.patientIC = '".$_GET['patientID']."'";
@@ -340,7 +412,7 @@
                         $url = "appointments.php?cancel=".$row['appt_id'];
                         // echo $row['appt_id']."<br>";
                         echo "
-                        <tr class='flex'>";
+                        <tr class='flex' id=".$row['appt_id'].">";
                         if ($_SESSION['role'] != 'dentist') {
                             echo "<td>Dr. ".$row2['dentist_name']."</td>
                             <td>".$row['clinic_location']."</td>";
@@ -352,10 +424,10 @@
                         if ($_SESSION['role'] == 'dentist') {
                             echo "<br'>
                             <div style='padding-top:10px;'>
-                                <button style='padding:8px;'>
+                                <button style='padding:8px;"; if ($row['status'] == 'Confirmed') {echo "display:none";} echo "' onClick='showPopup(".$row['appt_id'].", 1)'>
                                     <i class='fa fa-check' style='color:green'></i>
                                 </button>
-                                <button style='padding:8px;'>
+                                <button style='padding:8px;"; if ($row['status'] == 'Rejected') {echo "display:none";} echo "' onClick='showPopup(".$row['appt_id'].", 2)'>
                                     <i class='fa fa-times' style='color:red'></i>
                                 </button>
                             </div>";
@@ -363,17 +435,19 @@
                         echo "</td>
                             <td><button style='padding:8px;'><a href='appointmentinvoice.php?appt=".$row['appt_id']."'><i class='fa fa-file-text'></i></a></button>
                             ";
-                        if($row['status'] == 'Pending' || $row['status'] == 'Confirmed')
+                        if($row['status'] == 'Pending' || $row['status'] == 'Confirmed') {
                         // echo "<td><a href='".$url."' style='color:red' onClick='cancelApplication()'>Cancel Appointment</a></td></tr>";
-                        echo "
-                        <div style='display:flex; gap:8px'>
-                        <button style='padding:8px;'>
-                        <a href='reschedule.php?appt=".$row['appt_id']."' disabled>Reschedule</a>
-                        </button>
-                        <button style='padding:8px;'>
-                        <a href='#' style='color:red' onClick='showPopup(".$row['appt_id'].")'>Cancel</a></td></tr>
-                        </button>
-                        </div>";
+                            $cancel = "cancel";
+                            echo "
+                            <div style='display:flex; gap:8px'>
+                            <button style='padding:8px;'>
+                            <a href='reschedule.php?appt=".$row['appt_id']."' disabled>Reschedule</a>
+                            </button>
+                            <button style='padding:8px;'>
+                            <a href='#' style='color:red' onClick='showPopup(".$row['appt_id'].", 0)'>Cancel</a></td></tr>
+                            </button>
+                            </div>";
+                        }
                         else
                         echo "</td></tr>";
                     }
