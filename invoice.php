@@ -12,9 +12,11 @@ if(isset($_GET['logout'])){
 }
 
 $invoiceNum = ''; 
+$invoice_id = ''; 
 $appt_id = ''; 
 $patient_id = ''; 
 $total = ''; 
+$remaining = ''; 
 $date_created = '';
 $date_paid = '';
 $status = '';
@@ -28,9 +30,11 @@ if(isset($_GET['appt_id'])) {
             $row = mysqli_fetch_assoc($result);
             // echo "INVOICE NUMBER: " . $row['invoice_number'];
             $invoiceNum = $row['invoice_number'];
+            $invoice_id = $row['invoice_id'];
             $appt_id = $row['appt_id'];
             $patient_id = $row['patient_id'];
             $total = $row['invoice_total'];
+            $remaining = $row['invoice_amount_paid'];
             $date_created = $row['invoice_date_created'];
             $date_paid = $row['invoice_date_paid'];
             $status = $row['invoice_status'];
@@ -45,6 +49,7 @@ if(isset($_GET['appt_id'])) {
 }
 else {
     echo "appt_id parameter is not set in the URL.";
+    header("Location: appointments1.php");
 }
 
 $isDentist = false;
@@ -70,7 +75,7 @@ if (isset($_SESSION['role'])){
 	<body>
         <!-- <center> -->
         <?php require_once("header.php");?>
-        <div class='flex-center'>
+        <div class='flex-center' style='height:auto'>
             <div class='center-container vw50 invoice'>
                 <h2>Invoice</h2>
                 <br>
@@ -92,6 +97,10 @@ if (isset($_SESSION['role'])){
                         <td>RM <?php echo $total?></td>
                     </tr>
                     <tr>
+                        <th>Amount Paid</th>
+                        <td>RM <?php echo $remaining?></td>
+                    </tr>
+                    <tr>
                         <th>Date Created</th>
                         <td><?php echo $date_created?></td>
                     </tr>
@@ -107,19 +116,54 @@ if (isset($_SESSION['role'])){
                 <br>
                 <?php
                 if ($isDentist == true) {
-                    echo "<form action='createinvoice.php' method='POST'>
-                        <button type='submit'>Create Payment</button>
+                    echo "<form action='createpayment.php' method='POST'>
+                    <input type='hidden' name='invoice_id' value='".$invoice_id."'>    
+                    <input type='hidden' name='appt_id' value='".$appt_id."'>    
+                    <button type='submit'>Create Payment</button>
                     </form>";
                 } 
                 ?>
             </div>
         </div>
-        <div class='flex-center'>
-            <div class='center-container vw50'>
+        <br><br>
+        <div class='flex-center' style='height:auto'>
+            <div class='center-container payments vw50'>
                 <h2>Payments</h2>
+                <?php
+                $query = "SELECT * FROM payment WHERE invoice_id = ".$invoice_id;
+                // echo $query;
+                $res = mysqli_query($db, $query);
+                if ($res) {
+                    if (mysqli_num_rows($res) > 0) {
+                        echo "
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Amount</th>
+                                    <th>Payment Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                        ";
+                        while($row = mysqli_fetch_assoc($res)) {
+                            echo "
+                            <tr>
+                                <td>".$row['payment_id']."</td>
+                                <td>".$row['payment_amount']."</td>
+                                <td>".$row['payment_date']."</td>
+                            </tr>";
+                        }
+                        echo "
+                            </tbody>
+                        </table>"; 
+                    }
+                }
+                ?>
                 <br>
+            </div>
         </div>
-    </div>
+        <br><br>
         <!-- </center> -->
     </body>
 </html>

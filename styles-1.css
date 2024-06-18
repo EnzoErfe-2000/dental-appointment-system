@@ -403,3 +403,28 @@ table td {
 .invoice table tr:last-child td {
   border-bottom: none;
 }
+
+.payments table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.payments table th,
+table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.payments table th {
+  background-color: #f2f2f2;
+}
+
+.payments table td {
+  vertical-align: top;
+}
+
+.payments table tr:last-child td {
+  border-bottom: none;
+}

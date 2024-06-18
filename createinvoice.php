@@ -50,6 +50,9 @@ if(isset($_POST['appt_id'])) {
         }
     }
 }
+else {
+    header("Location: appointments1.php");
+}
 
 ?>
 <!DOCTYPE HTML>
