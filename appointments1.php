@@ -13,6 +13,8 @@
     //     header("location: login.php");
 
     // }
+
+
     $isDentist = false;
     if (isset($_SESSION['role'])){
         if ($_SESSION['role'] == 'dentist') {
@@ -307,6 +309,7 @@
             hideAllPopups(); // Close the popup after action
             return false; // Prevent default link behavior
         }
+
     </script>
 
 </head>
@@ -401,7 +404,7 @@
                     <th>Date/Time</th>
                     <th>Purpose</th>
                     <th>Status</th>
-                    <th>Invoice/Actions</th>
+                    <th>Actions</th>
                     </tr>";
                 while($row = mysqli_fetch_assoc($result))
                 {
@@ -438,8 +441,26 @@
                             </div>";
                         }
                         echo "</td>
-                            <td><button style='padding:8px;'><a href='appointmentinvoice.php?appt=".$row['appt_id']."'><i class='fa fa-file-text'></i></a></button>
-                            ";
+                        <td>";
+                        if($row['status'] != 'Cancelled') {
+                            if (!$row['invoice_id']) {
+                                if ($isDentist == true) {
+                                    echo "
+                                    <form action='createinvoice.php' method='POST' style='margin-bottom:8px'>
+                                        <input type='hidden' name='appt_id' value='".$row['appt_id']."'>
+                                        <input type='hidden' name='patient_id' value='".$row['patient_id']."'>
+                                        
+                                        <button type='submit' style='padding:8px;'><a href='#'><i class='fa fa-file-text' style='padding-right:8px'></i></a>Create Invoice</button>
+                                    </form>
+                                    ";
+                                }
+                            }
+                            else {
+                                echo "
+                                <button style='padding:8px; margin-bottom:8px;'><a href='invoice.php?appt_id=".$row['appt_id']."'><i class='fa fa-file-text'></i> View Invoice</a></button>
+                                ";
+                            }
+                        }
                         if($row['status'] == 'Pending' || $row['status'] == 'Confirmed') {
                         // echo "<td><a href='".$url."' style='color:red' onClick='cancelApplication()'>Cancel Appointment</a></td></tr>";
                             $cancel = "cancel";

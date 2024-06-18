@@ -36,7 +36,7 @@ if(isset($_GET['logout'])){
                 <a href="login.php">Login</a>
             </div>
         </div>
-        <div class=homemain>
+        <div class="homemain">
             <div class="container">
                 <div class="column">
                     <div class="sub-div">

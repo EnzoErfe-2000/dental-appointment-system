@@ -8,9 +8,16 @@
     <!-- Sidebar menu -->
     <ul>
         <li><a href="index.php">Home</a></li>
-        <li><a href="schedules.php">Book Appointment</a></li>
+        <?php if(!isset($_SESSION['username'])){?> 
+        <!-- <li><a href="registration.php">Sign up</a></li>	 -->
+        <li><a href="schedules.php">Book Appointment</a></li>	
         <li><a href="checkappointment.php">Check Appointments</a></li>
-        <li><a href="login1.php">Admin Login</a></li>
+        <li><a class="cta" href="login1.php">Admin Login</a></li>
+        <?php }?>
+        <?php if(isset($_SESSION['username'])){?>
+        <li><a href="pastappointments1.php">Past Appointments</a></li>
+        <li><a href="index.php?logout='1'">Logout</a> </li>	
+        <?php }?>           
     </ul>
 </div>
 

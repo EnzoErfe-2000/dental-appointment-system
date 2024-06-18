@@ -182,7 +182,7 @@ if(isset($_POST['update_appt'])) {
                                     <tr></tr>
                                 <th>Reason For Appointment</th>
                                 <td>".$reason."</td>
-                                <th>Medical Comments<span class='req'>*</span></th>
+                                <th>Medical Comments</th>
                                 <td><input type='text' id='comments' name='comments' value='".$row['patientMedical']."' placeholder='Medical conditions.' ></td>
                             </tr>
                         </table>
