@@ -50,10 +50,11 @@ if (isset($_POST['payment_amount'])) {
     $invoice_id = intval($_POST['invoice_id']);
     $invoice_status = $_POST['invoice_status'];
     $amount_remaining = ($_POST['payment_balance'] - $_POST['payment_amount']);
+    $full_payment_status = ($invoice_status == 'Completed' ? 'NOW()' : 'NULL' );
     $query = "INSERT INTO payment (invoice_id, payment_amount, payment_date, payment_balance) VALUES (".$_POST['invoice_id'].", ".$_POST['payment_amount'].", NOW(), ".$amount_remaining.")"; 
     // echo $query."<br>";
     
-    $query2 = "UPDATE invoice SET invoice_amount_paid = (invoice_total - $amount_remaining), invoice_status = '$invoice_status' WHERE invoice_id = $invoice_id";
+    $query2 = "UPDATE invoice SET invoice_amount_paid = (invoice_total - $amount_remaining), invoice_status = '$invoice_status', invoice_date_paid = $full_payment_status WHERE invoice_id = $invoice_id";
     // echo $query2."<br>";
 
     $result = mysqli_query($db, $query);

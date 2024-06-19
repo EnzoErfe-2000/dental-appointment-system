@@ -24,15 +24,15 @@
     if(isset($_GET['delete']) && $_SESSION['role'] == 'patient') #delete pending appointment
     {
         $id = $_GET['delete'];
-        $cancel_query = "DELETE FROM appointment WHERE appt_id='".$id."'";
-        mysqli_query($db, $cancel_query);
-        unset($_GET['cancel']);
+        $delete_query = "DELETE FROM appointment WHERE appt_id='".$id."'";
+        mysqli_query($db, $delete_query);
+        unset($_GET['delete']);
     }
     if(isset($_GET['reject']) && $_SESSION['role'] == 'dentist') #reject pending appointment
     {
         $id = $_GET['reject'];
-        $cancel_query = "UPDATE appointment SET status = 'Rejected' WHERE appt_id='".$id."'";
-        mysqli_query($db, $cancel_query);
+        $reject_query = "UPDATE appointment SET status = 'Rejected' WHERE appt_id='".$id."'";
+        mysqli_query($db, $reject_query);
         unset($_GET['reject']);
         
         // EMAIL
@@ -431,15 +431,17 @@
                                 <td>".$row['appt_reason']."</td>
                                 <td>".$row['status'];
                             if ($isDentist == true){
-                                echo "<br'>
-                                <div style='padding-top:10px;'>
-                                    <button style='padding:8px;"; if ($row['status'] == 'Confirmed' || $row['status'] == 'Cancelled') {echo "display:none";} echo "' onClick='showPopup(".$row['appt_id'].", 1)'>
-                                        <i class='fa fa-check' style='color:green'></i>
+                                if ($row['status'] == 'Pending') {
+                                    echo "<br>
+                                    <div style='padding-top:10px;'>
+                                    <button style='padding:8px;' onClick='showPopup(".$row['appt_id'].", 1)'>
+                                    <i class='fa fa-check' style='color:green'></i>
                                     </button>
-                                    <button style='padding:8px;"; if ($row['status'] == 'Rejected' || $row['status'] == 'Cancelled') {echo "display:none";} echo "' onClick='showPopup(".$row['appt_id'].", 2)'>
-                                        <i class='fa fa-times' style='color:red'></i>
+                                    <button style='padding:8px;' onClick='showPopup(".$row['appt_id'].", 2)'>
+                                    <i class='fa fa-times' style='color:red'></i>
                                     </button>
-                                </div>";
+                                    </div>";
+                                }
                             }
                             echo "</td>
                             <td>";
@@ -464,7 +466,7 @@
                             }
                             if($row['status'] == 'Pending' || $row['status'] == 'Confirmed') {
                             // echo "<td><a href='".$url."' style='color:red' onClick='cancelApplication()'>Cancel Appointment</a></td></tr>";
-                                $cancel = "cancel";
+                                // $cancel = "cancel";
                                 echo "
                                 <div style='display:flex; gap:8px'>
                                 <button style='padding:8px;'>

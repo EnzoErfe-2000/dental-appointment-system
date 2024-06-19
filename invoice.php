@@ -105,8 +105,8 @@ if (isset($_SESSION['role'])){
                         <td><?php echo $date_created?></td>
                     </tr>
                     <tr>
-                        <th>Date Paid</th>
-                        <td><?php echo $date_created?></td>
+                        <th>Date Fully Paid</th>
+                        <td><?php echo $date_paid?></td>
                     </tr>
                     <tr>
                         <th>Status</th>
