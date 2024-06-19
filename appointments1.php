@@ -381,104 +381,109 @@
     <br><br>
     <?php
             // $query = "SELECT * FROM appointment WHERE patient_id='".$_GET['patientID']."'";
-            if ($isDentist == true){
-                    $query = "SELECT a.*, c.clinic_location FROM appointment a JOIN clinic c ON a.clinic_id = c.clinic_id WHERE a.dentist_id = '".$dentistID."'";
-            }
-            else {
-                $query = "SELECT a.*, b.patientID, c.clinic_location FROM appointment a JOIN patient b JOIN clinic c ON a.clinic_id = c.clinic_id AND a.patient_id = b.patientID WHERE b.patientIC = '".$_GET['patientID']."'";
-            }
-            // echo $query."<br>";
-            $result = mysqli_query($db, $query);
-            if($result == false || mysqli_num_rows($result) == 0)
-            echo "<h4>No appointments to show</h4>";
-            else
-            {
-                echo "<h4>Your Appointments</h4>";
-                echo "<table>
-                <tr>";
-                if ($isDentist != true) {
-                    echo "<th>Dentist</th>
-                    <th>Location</th>";
+            if(isset($dentistID)) {
+                if ($isDentist == true){
+                        $query = "SELECT a.*, c.clinic_location FROM appointment a JOIN clinic c ON a.clinic_id = c.clinic_id WHERE a.dentist_id = '".$dentistID."'";
                 }
-                echo"
-                    <th>Date/Time</th>
-                    <th>Purpose</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                    </tr>";
-                while($row = mysqli_fetch_assoc($result))
+                else {
+                    $query = "SELECT a.*, b.patientID, c.clinic_location FROM appointment a JOIN patient b JOIN clinic c ON a.clinic_id = c.clinic_id AND a.patient_id = b.patientID WHERE b.patientIC = '".$_GET['patientID']."'";
+                }
+                $result = mysqli_query($db, $query);
+                // echo $query."<br>";
+                if($result == false || mysqli_num_rows($result) == 0)
+                echo "<h4>No appointments to show</h4>";
+                else
                 {
-                    if(date('Y-m-d') < $row['appt_date'])
+                    echo "<h4>Your Appointments</h4>";
+                    echo "<table>
+                    <tr>";
+                    if ($isDentist != true) {
+                        echo "<th>Dentist</th>
+                        <th>Location</th>";
+                    }
+                    echo"
+                        <th>Date/Time</th>
+                        <th>Purpose</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                        </tr>";
+                    while($row = mysqli_fetch_assoc($result))
                     {
-                        $query2 = "SELECT dentist_name FROM dentist WHERE dentist_id = '".$row['dentist_id']."' LIMIT 1";
-                        // echo $query2."<br>";
-                        $dentist_name = mysqli_query($db, $query2);
-                        $row2 = mysqli_fetch_assoc($dentist_name);
-                        if($row['status'] == 'Pending')
-                        $url = "appointments.php?delete=".$row['appt_id'];
-                        else
-                        $url = "appointments.php?cancel=".$row['appt_id'];
-                        // echo $row['appt_id']."<br>";
-                        echo "
-                        <tr class='flex' id=".$row['appt_id'].">";
-                        if ($isDentist != true) {
-                            echo "<td>Dr. ".$row2['dentist_name']."</td>
-                            <td>".$row['clinic_location']."</td>";
-                        }
-                        echo"
-                            <td>".$row['appt_date']."<br>".$row['appt_time']."HRS</td>
-                            <td>".$row['appt_reason']."</td>
-                            <td>".$row['status'];
-                        if ($isDentist == true){
-                            echo "<br'>
-                            <div style='padding-top:10px;'>
-                                <button style='padding:8px;"; if ($row['status'] == 'Confirmed' || $row['status'] == 'Cancelled') {echo "display:none";} echo "' onClick='showPopup(".$row['appt_id'].", 1)'>
-                                    <i class='fa fa-check' style='color:green'></i>
-                                </button>
-                                <button style='padding:8px;"; if ($row['status'] == 'Rejected' || $row['status'] == 'Cancelled') {echo "display:none";} echo "' onClick='showPopup(".$row['appt_id'].", 2)'>
-                                    <i class='fa fa-times' style='color:red'></i>
-                                </button>
-                            </div>";
-                        }
-                        echo "</td>
-                        <td>";
-                        if($row['status'] != 'Cancelled') {
-                            if (!$row['invoice_id']) {
-                                if ($isDentist == true) {
+                        if(date('Y-m-d') < $row['appt_date'])
+                        {
+                            $query2 = "SELECT dentist_name FROM dentist WHERE dentist_id = '".$row['dentist_id']."' LIMIT 1";
+                            // echo $query2."<br>";
+                            $dentist_name = mysqli_query($db, $query2);
+                            $row2 = mysqli_fetch_assoc($dentist_name);
+                            if($row['status'] == 'Pending')
+                            $url = "appointments.php?delete=".$row['appt_id'];
+                            else
+                            $url = "appointments.php?cancel=".$row['appt_id'];
+                            // echo $row['appt_id']."<br>";
+                            echo "
+                            <tr class='flex' id=".$row['appt_id'].">";
+                            if ($isDentist != true) {
+                                echo "<td>Dr. ".$row2['dentist_name']."</td>
+                                <td>".$row['clinic_location']."</td>";
+                            }
+                            echo"
+                                <td>".$row['appt_date']."<br>".$row['appt_time']."HRS</td>
+                                <td>".$row['appt_reason']."</td>
+                                <td>".$row['status'];
+                            if ($isDentist == true){
+                                echo "<br'>
+                                <div style='padding-top:10px;'>
+                                    <button style='padding:8px;"; if ($row['status'] == 'Confirmed' || $row['status'] == 'Cancelled') {echo "display:none";} echo "' onClick='showPopup(".$row['appt_id'].", 1)'>
+                                        <i class='fa fa-check' style='color:green'></i>
+                                    </button>
+                                    <button style='padding:8px;"; if ($row['status'] == 'Rejected' || $row['status'] == 'Cancelled') {echo "display:none";} echo "' onClick='showPopup(".$row['appt_id'].", 2)'>
+                                        <i class='fa fa-times' style='color:red'></i>
+                                    </button>
+                                </div>";
+                            }
+                            echo "</td>
+                            <td>";
+                            if($row['status'] != 'Cancelled') {
+                                if (!$row['invoice_id']) {
+                                    if ($isDentist == true) {
+                                        echo "
+                                        <form action='createinvoice.php' method='POST' style='margin-bottom:8px'>
+                                            <input type='hidden' name='appt_id' value='".$row['appt_id']."'>
+                                            <input type='hidden' name='patient_id' value='".$row['patient_id']."'>
+                                            
+                                            <button type='submit' style='padding:8px;'><a href='#'><i class='fa fa-file-text' style='padding-right:8px'></i></a>Create Invoice</button>
+                                        </form>
+                                        ";
+                                    }
+                                }
+                                else {
                                     echo "
-                                    <form action='createinvoice.php' method='POST' style='margin-bottom:8px'>
-                                        <input type='hidden' name='appt_id' value='".$row['appt_id']."'>
-                                        <input type='hidden' name='patient_id' value='".$row['patient_id']."'>
-                                        
-                                        <button type='submit' style='padding:8px;'><a href='#'><i class='fa fa-file-text' style='padding-right:8px'></i></a>Create Invoice</button>
-                                    </form>
+                                    <button style='padding:8px; margin-bottom:8px;'><a href='invoice.php?appt_id=".$row['appt_id']."'><i class='fa fa-file-text'></i> View Invoice</a></button>
                                     ";
                                 }
                             }
-                            else {
+                            if($row['status'] == 'Pending' || $row['status'] == 'Confirmed') {
+                            // echo "<td><a href='".$url."' style='color:red' onClick='cancelApplication()'>Cancel Appointment</a></td></tr>";
+                                $cancel = "cancel";
                                 echo "
-                                <button style='padding:8px; margin-bottom:8px;'><a href='invoice.php?appt_id=".$row['appt_id']."'><i class='fa fa-file-text'></i> View Invoice</a></button>
-                                ";
+                                <div style='display:flex; gap:8px'>
+                                <button style='padding:8px;'>
+                                <a href='reschedule.php?appt=".$row['appt_id']."' disabled>Reschedule</a>
+                                </button>
+                                <button style='padding:8px;'>
+                                <a href='#' style='color:red' onClick='showPopup(".$row['appt_id'].", 0)'>Cancel</a></td></tr>
+                                </button>
+                                </div>";
                             }
+                            else
+                            echo "</td></tr>";
                         }
-                        if($row['status'] == 'Pending' || $row['status'] == 'Confirmed') {
-                        // echo "<td><a href='".$url."' style='color:red' onClick='cancelApplication()'>Cancel Appointment</a></td></tr>";
-                            $cancel = "cancel";
-                            echo "
-                            <div style='display:flex; gap:8px'>
-                            <button style='padding:8px;'>
-                            <a href='reschedule.php?appt=".$row['appt_id']."' disabled>Reschedule</a>
-                            </button>
-                            <button style='padding:8px;'>
-                            <a href='#' style='color:red' onClick='showPopup(".$row['appt_id'].", 0)'>Cancel</a></td></tr>
-                            </button>
-                            </div>";
-                        }
-                        else
-                        echo "</td></tr>";
-                    }
 
+                    }
                 }
+            }
+            else {
+                echo "<h4>No Dentist Details detected. Contact your local administrator.</h4>";
             }
         // if($_SESSION['role'] == 'patient') {
         // }

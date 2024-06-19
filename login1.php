@@ -93,7 +93,7 @@ $errors=[];
         <div class="signin-content">
             <div class="signin-image">
                 <figure><img src="images/signin-image.jpg" alt="sing up image"></figure>
-                <a href="registration.php" class="signup-image-link">New here? Create an account</a>
+                <a href="registration1.php" class="signup-image-link">New here? Create an account</a>
             </div>
 
             <div class="signin-form">
