@@ -72,10 +72,15 @@ if(isset($_GET['logout'])){
                         </div>
                     </div>
                     <div class="sub-div">
-                        <div>
+                        <div style='display:flex; flex-direction:column;'>
                         <?php 
-                        if (isset($_SESSION['username'])){ 
-                            echo "<a class='cta' href='makeappointment1.php?dentist=".$_SESSION['dentistName']."'>Create an appointment for Dr. ".$_SESSION['dentistName']."</a>";
+                        if (isset($_SESSION['username']) && isset($_SESSION['username'])){
+                            if ($_SESSION['role'] == 'dentist') {
+                                echo "<a class='cta' href='makeappointment1.php?dentist=".$_SESSION['dentistName']."'>Create an appointment for Dr. ".$_SESSION['dentistName']."</a>";
+                            } 
+                            else if ($_SESSION['role'] == 'admin') {
+                                echo "<div style='display:flex; justify-content:center;'>Manage</div><br><div><a class='cta' href='addclinic1.php'>Clinics</a><a class='cta' href='adddentist1.php'>Dentists</a></div>";
+                            }
                         } 
                         else {
                             echo "<a class='cta' href='schedules.php'>Book an appointment today!</a>";

@@ -15,7 +15,15 @@
         <li><a class="cta" href="login1.php">Admin Login</a></li>
         <?php }?>
         <?php if(isset($_SESSION['username'])){?>
-        <li><a href="pastappointments1.php">Past Appointments</a></li>
+        <?php if(isset($_SESSION['role']) && $_SESSION['role'] == 'dentist'){?>
+            <li><a href="pastappointments1.php">Past Appointments</a></li>
+        <?php }?>    
+        <?php if(isset($_SESSION['role']) && $_SESSION['role'] == 'admin'){?>
+            <li><a href='addclinic1.php'>Add Clinic</a></li>
+            <li><a href='adddentist1.php'>Add Dentist</a></li>
+            <li><a href='allappointments.php'>View Appointments</a></li>
+            <li><a href='generatecode.php'>Manage  Registration Codes</a></li>
+        <?php }?>    
         <li><a href="index.php?logout='1'">Logout</a> </li>	
         <?php }?>           
     </ul>
@@ -36,7 +44,7 @@
     </script>
 
     <nav>
-        <ul class="nav__links">
+        <ul class="nav__links" <?php if(isset($_SESSION['username']) && $_SESSION['role'] == 'admin') {echo "style='font-size:small;'";}?>>
             <li><a href="index.php">Home</a></li>
             <?php if(!isset($_SESSION['username'])){?> 
                 <!-- <li><a href="registration.php">Sign up</a></li>	 -->
@@ -47,8 +55,11 @@
             <?php if(isset($_SESSION['username'])){
                 if($_SESSION['role'] == 'admin')
                 {
-                    echo "<li><a href='addclinic.php'>Add Clinic</a></li>";
-                    echo "<li><a href='adddentist.php'>Add Dentist</a></li>";
+
+                    echo "<li><a href='addclinic1.php'>Add Clinic</a></li>";
+                    echo "<li><a href='adddentist1.php'>Add Dentist</a></li>";
+                    echo "<li><a href='allappointments.php'>View Appointments</a></li>";
+                    echo "<li><a href='generatecode.php'>Manage  Registration Codes</a></li>";
                 }
                 else {
                 if($_SESSION['role'] == 'patient')
